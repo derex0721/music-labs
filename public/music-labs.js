@@ -83,9 +83,20 @@ const discoverCategories=[
   {label:'Tutorials',slug:'tutorials',intro:'能直接改善音樂製作與樂理理解的實用教學。'},
   {label:'Music Tech',slug:'music-tech',intro:'聲音、軟體與創作介面正在發生的技術變化。'}
 ];
-document.getElementById('newsFilters').innerHTML=discoverCategories.map(category=>`<a href="/#discover/${category.slug}" data-cat="${category.label}">${category.label}</a>`).join('');
-function syncDiscover(){const hash=(location.hash||'#discover/all').slice(1).split('/');if(!['discover','news'].includes(hash[0]))return;const selected=discoverCategories.find(category=>category.slug===(hash[1]||'all'))||discoverCategories[0];document.getElementById('newsEyebrow').textContent=`DISCOVER / ${selected.slug.toUpperCase()}`;document.getElementById('newsTitle').innerHTML=selected.label==='All'?'Music <em>Discover</em>':`Discover <em>${html(selected.label)}</em>`;document.getElementById('newsIntro').textContent=selected.intro;document.querySelectorAll('#newsFilters a').forEach(link=>{const active=link.dataset.cat===selected.label;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});document.querySelectorAll('#newsPageGrid .news-card').forEach(card=>card.hidden=selected.label!=='All'&&card.dataset.cat!==selected.label)}
+const discoverCategoryLabels={
+  'zh-Hant':{All:'全部','AI Music':'AI 音樂',Plugins:'外掛',Software:'軟體',Hardware:'硬體','Free Resources':'免費資源',Tutorials:'教學','Music Tech':'音樂科技'},
+  'zh-Hans':{All:'全部','AI Music':'AI 音乐',Plugins:'插件',Software:'软件',Hardware:'硬件','Free Resources':'免费资源',Tutorials:'教程','Music Tech':'音乐科技'}
+};
+const discoverLocale=()=>document.getElementById('langSelect')?.value||localStorage.getItem('ml-locale')||'zh-Hant';
+const discoverCategoryLabel=label=>discoverCategoryLabels[discoverLocale()]?.[label]||label;
+function renderDiscoverCategoryLabels(){
+  document.querySelectorAll('#newsFilters [data-cat]').forEach(link=>{link.textContent=discoverCategoryLabel(link.dataset.cat)});
+  document.querySelectorAll('.news-card').forEach(card=>{const tag=card.querySelector('.tag');if(tag)tag.textContent=discoverCategoryLabel(card.dataset.cat)});
+}
+document.getElementById('newsFilters').innerHTML=discoverCategories.map(category=>`<a href="/#discover/${category.slug}" data-cat="${category.label}">${discoverCategoryLabel(category.label)}</a>`).join('');
+function syncDiscover(){const hash=(location.hash||'#discover/all').slice(1).split('/');if(!['discover','news'].includes(hash[0]))return;const selected=discoverCategories.find(category=>category.slug===(hash[1]||'all'))||discoverCategories[0];const label=discoverCategoryLabel(selected.label);const chinese=discoverLocale().startsWith('zh');document.getElementById('newsEyebrow').textContent=chinese?`探索 / ${label}`:`DISCOVER / ${selected.slug.toUpperCase()}`;document.getElementById('newsTitle').innerHTML=selected.label==='All'?'Music <em>Discover</em>':`Discover <em>${html(label)}</em>`;document.getElementById('newsIntro').textContent=selected.intro;document.querySelectorAll('#newsFilters a').forEach(link=>{const active=link.dataset.cat===selected.label;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});document.querySelectorAll('#newsPageGrid .news-card').forEach(card=>card.hidden=selected.label!=='All'&&card.dataset.cat!==selected.label);renderDiscoverCategoryLabels()}
 addEventListener('hashchange',syncDiscover);syncDiscover();
+document.getElementById('langSelect')?.addEventListener('change',()=>{renderDiscoverCategoryLabels();syncDiscover()});
 
 const quickNotes=['C4','E4','G4','B4'];
 const quickPitch=new Set(['C','E','G','B']);
