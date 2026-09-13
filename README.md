@@ -8,6 +8,8 @@ Music Labs is an interactive music platform for modern creators—bringing music
 
 [開啟 Music Labs / Visit Music Labs](https://music-labs.pages.dev/)
 
+[![Music Labs 首頁預覽 / Homepage preview — Quick Lab 和弦鍵盤與音樂創作工具](docs/images/music-labs-homepage.jpg)](https://music-labs.pages.dev/)
+
 ---
 
 ## 中文介紹
