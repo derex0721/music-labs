@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /__forms.html
+
+Sitemap: https://musiclabs-derex.netlify.app/sitemap.xml

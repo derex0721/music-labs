@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://musiclabs-derex.netlify.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/chords/c-major</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/chords/cmaj7</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/scales/c-major</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/scales/c-dorian</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/chords-scales</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/tools/progression-lab</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/tools/transpose</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/tools/bpm-calculator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/tools/circle-of-fifths</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/discover</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/artists/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://musiclabs-derex.netlify.app/artists/submit/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
+</urlset>

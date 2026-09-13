@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="description" content="提交作品集，申請加入 Music Labs 創作者聚落。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="加入創作者聚落 — Music Labs" />
+  <meta property="og:description" content="提交你的音樂作品與創作方向，申請加入 Music Labs。" />
+  <meta property="og:url" content="https://musiclabs-derex.netlify.app/artists/submit/" />
+  <link rel="canonical" href="https://musiclabs-derex.netlify.app/artists/submit/" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <title>加入創作者聚落 — Music Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/artists.css?v=20260912-2" />
+</head>
+<body>
+  <a class="sr-only" href="#artistSubmitMain">Skip to content</a>
+  <header class="artist-topbar"><a class="brand" href="/#home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><nav class="artist-nav"><a class="artists-link" href="/artists/">← Artists</a><button id="artistThemeToggle" class="theme-control" type="button" aria-label="切換色彩模式">☀</button></nav></header>
+  <main class="submit-shell wrap" id="artistSubmitMain">
+    <p class="eyebrow">COMMUNITY / ARTIST SUBMISSION</p><h1>加入創作者聚落</h1><p class="intro">我們目前以邀請制為主。如果你希望被收錄，請提交作品與創作方向；資料會直接送到 Music Labs，不需要另外開啟 Email App。</p>
+    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="artist-submission" /><input type="hidden" name="subject" value="Music Labs 創作者聚落申請" />
+      <p class="honeypot"><label>請勿填寫此欄位 <input name="bot-field" /></label></p>
+      <label>NAME / ARTIST NAME<input name="name" maxlength="80" required autocomplete="name" /></label>
+      <label>EMAIL<input name="email" type="email" maxlength="160" required autocomplete="email" /></label>
+      <label>ROLE<select name="role" required><option value="">請選擇</option><option>Producer</option><option>Guitarist</option><option>Vocalist</option><option>DJ</option><option>Composer</option></select></label>
+      <label>PORTFOLIO URL<input name="portfolio" type="url" placeholder="https://" required inputmode="url" /></label>
+      <label>ONE-LINE INTRO<textarea name="intro" maxlength="300" required></textarea></label>
+      <button class="btn" type="submit">SUBMIT YOUR WORK →</button><p class="form-status" id="submitStatus" role="status" aria-live="polite"></p>
+    </form>
+    <section class="submission-success" id="artistSubmitSuccess" role="status" aria-live="polite" hidden><span>✓</span><h2>Submission received.</h2><p>我們已收到你的作品資料，確認後會再與你聯繫。</p><a class="btn secondary" href="/artists/">BACK TO ARTISTS</a></section>
+  </main>
+  <footer class="artist-footer"><div class="wrap"><span>Music Labs / Artist Collective</span><div class="footer-contact"><a href="mailto:derexbowei0706@gmail.com">derexbowei0706@gmail.com</a><a href="https://www.instagram.com/musicway666?stkn=MWxudzFoZ2Y5MWZndA==" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="https://youtube.com/@derexlee6898?si=05wEtDKrtBzh2gT7" target="_blank" rel="noopener noreferrer">YouTube ↗</a></div></div></footer>
+  <script type="module" src="/artists.js?v=20260912-2"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+[build]
+  command = "npm run build:assets && cp public/music-labs.html public/index.html"
+  publish = "public"
+
+[build.environment]
+  NODE_VERSION = "22"
+

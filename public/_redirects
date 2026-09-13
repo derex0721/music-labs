@@ -1,0 +1,14 @@
+/tools/transpose          /index.html#transpose          200
+/tools/bpm                /index.html#bpm                200
+/tools/bpm-calculator     /index.html                    200
+/tools/ai-chords          /index.html#ai-chords          200
+/tools/progression-lab    /index.html                    200
+/tools/circle-of-fifths   /index.html#circle-of-fifths   200
+/chords-scales            /index.html#chords-scales      200
+/chords/*                 /index.html                    200
+/scales/*                 /index.html                    200
+/discover                 /index.html#discover            200
+/artists                  /artists/index.html            200
+/artists/submit           /artists/submit/index.html     200
+/artists/*                /artists/index.html            200
+/*                        /index.html                    200
