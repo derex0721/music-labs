@@ -1,126 +1,198 @@
-# vinext-starter
+# Music Labs
 
-A clean full-stack starter running on [vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and Drizzle support.
+> **Learn music. Make better music.**
 
-## Prerequisites
+Music Labs 是一個為現代音樂創作者打造的互動音樂平台，將樂理學習、聽覺練習、創作工具、音樂科技情報與創作者作品集中在同一個地方。
 
-- Node.js `>=22.13.0`
-- Portable: Windows, macOS, or Linux; no Bash required
-- Managed Linux: managed Linux runtime with Bash, `flock`, `curl`, `sha256sum`, and GNU `timeout`
-- Git is required only for publishing
+Music Labs is an interactive music platform for modern creators—bringing music theory, ear-friendly practice, practical creation tools, music-tech discoveries, and an artist community into one focused experience.
 
-## Sites Lifecycle
+[開啟 Music Labs / Visit Music Labs](https://music-labs.pages.dev/)
 
-The Sites initializer copies the shared starter and selects managed-linux only when `SITES_MANAGED_LINUX_CONTAINER=1`; otherwise it selects portable. It saves the selection only in ignored `.sites-runtime/execution-profile.json`. Both profiles copy/configure first, then use the plugin's separate `install-dependencies.mjs` step to measure installation independently. Edit source under `app/` and follow the Sites skill for installation, preview, builds, and publishing.
+---
 
-Whenever reopening or moving a checkout, run `node <plugin-root>/scripts/configure-execution-profile.mjs` before project commands. Profile changes do not alter tracked source or require reinstalling otherwise-valid dependencies; restart an existing preview to use the new selection. Do not commit or upload `.sites-runtime/`.
+## 中文介紹
 
-This starter does not use `wrangler.jsonc`.
+### 關於 Music Labs
 
-`install:ci` runs `npm ci` once against the shared lockfile, disables parent-workspace discovery, and includes required dev/optional dependencies despite production/omit settings. Sharp defaults to prebuilt binaries unless explicitly configured otherwise. Do not overlap installers.
+樂理不應只停留在文字與公式。Music Labs 讓使用者可以直接查看、聆聽並操作和弦、音階與和弦進行，把抽象知識轉化成真正能用在編曲、作曲與音樂製作中的直覺。
 
-- **Portable:** Preserve host HOME, npm cache, registry, proxy, temporary paths, retry/concurrency settings, and lifecycle-script policy. Use `--prefer-offline --no-audit --no-fund`.
-- **Managed Linux:** Use the existing project-local HOME/cache/tmp setup and Linux install lock, tarball preflight, and timeout. Restore the image-seeded npm cache only when its lockfile hash matches; retain network fallback. Builds keep their existing timeout. These helpers are not invoked by the portable profile.
+網站以「Learn → Practice → Create → Discover」為核心路徑：
 
-`scripts/sites-env.mjs` preserves the caller's HOME, npm cache, proxy, XDG, and temporary-directory configuration while defaulting Wrangler and Miniflare state to the checkout. If npm reports an unwritable cache, select a writable path with `npm_config_cache` for that install. The `dev` and `start` scripts also keep Wrangler logs inside the checkout. Generated `.sites-runtime/` and `.wrangler/` directories are disposable and ignored by Git.
+- **Learn**：探索和弦、音階、調式、組成音與音程關係。
+- **Practice**：透過分級測驗練習和弦、音階與組成音辨識。
+- **Create**：使用和弦進行、移調、BPM、Delay 時值、Tap Tempo 與五度圈等工具。
+- **Discover**：追蹤值得音樂創作者注意的軟體、Plugin、AI 音樂與製作技術。
+- **Community**：讓音樂人投稿作品，通過確認後加入創作者聚落。
 
-On portable, `npm run dev` uses `vinext dev` with HMR, starting at port 5173. Vinext records the running server in ignored `.vinext/` state, rejects an ordinary duplicate launch, and recovers stale state after a stopped process; exactly simultaneous starts can race. Pass `--port <port>` or `--hostname <host>` after `npm run dev --` when needed; keep portable previews on loopback.
+### 主要功能
 
-On managed Linux, use `sites-preview start` only for requested browser QA. The project's dev script runs Vite and accepts the supervisor's `--host 0.0.0.0 --port 4173 --strictPort` arguments. The internal browser uses `http://terminal.local:4173/`; it is not a user-facing URL. The supervisor owns the preview lifecycle. The ignored local profile survives the supervisor's cleared process environment.
+- **Chord Explorer**：查詢和弦公式、組成音與音程，並直接播放。
+- **Scale Explorer**：比較音階與調式結構，查看鍵盤位置並聆聽音色。
+- **Music Quiz**：依主題與難度練習樂理，每題提供簡短解釋。
+- **Progression Lab**：依調性與情緒取得四和弦創作起點。
+- **Transpose**：快速移調，保留延伸音與斜線和弦。
+- **BPM Calculator**：計算常用音符與 Delay 時值，支援 Tap Tempo。
+- **Circle of Fifths**：互動查看調號、音階與常用功能和弦。
+- **Discover**：整理音樂工具、免費資源、AI 音樂與產業動態。
+- **Artists**：展示經確認的創作者、作品集與相關連結。
 
-The portable profile simulates ChatGPT sign-in only for loopback development requests. Visit `/signin-with-chatgpt?return_to=/` to sign in as `local_seedy` (`seedy@sites.test`, display name `Seedy`) and `/signout-with-chatgpt?return_to=/` to sign out. The development cookie preserves that identity across server restarts. Mock auth is disabled in the managed-linux profile and is not included in production builds; hosted authentication remains dispatch-owned.
+### 投稿與意見回饋
 
-The Worker uses `vinext/server/fetch-handler`, including Vinext's config-aware image handling. After building, `npm start` runs that Worker locally through Wrangler on `127.0.0.1`, sharing `.wrangler/state` with dev preview and local D1 migrations; it does not deploy the site or simulate sign-in. Use the URL printed by the server. Pass `npm start -- --port <port>` to select a different built-preview port.
+創作者投稿與 Feedback 表單皆透過 **Cloudflare Pages Functions** 驗證，再由 **Resend** 將內容安全寄送給管理者。
 
-Local previews use Miniflare's placeholder `Request.cf` metadata without a network lookup. Set `CLOUDFLARE_CF_FETCH_ENABLED=true` to opt into fetching preview metadata; this setting does not change hosted request metadata.
+- 投稿內容不會自動公開。
+- 管理者確認資料後，才會建立創作者頁面。
+- API Key 僅存放於 Cloudflare 的加密環境變數，不會出現在前端程式碼中。
+- 表單包含欄位驗證、來源檢查、內容長度限制與 honeypot 防垃圾訊息機制。
 
-Local tool usage metrics are disabled by default. Set `WRANGLER_SEND_METRICS=true` to opt in.
+### 技術架構
 
-## Included Shape
+- HTML、CSS、JavaScript
+- TypeScript
+- Web Audio API
+- Tonal.js
+- React 19 / Next.js 16 / Vinext / Vite
+- Cloudflare Pages
+- Cloudflare Pages Functions
+- Resend Email API
 
-- edit site code under `app/`
-- `app/chatgpt-auth.ts` provides optional dispatch-owned ChatGPT sign-in helpers
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/index.ts` reads the D1 binding from the Cloudflare Worker environment
-- `db/schema.ts` starts intentionally empty
-- `@cloudflare/workers-types` provides Worker types; `cloudflare-env.d.ts` declares optional `DB`/`BUCKET` bindings—update these declarations if binding names change
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+### 專案結構
 
-## Workspace Auth Headers
-
-Signed-in visitors receive both `oai-authenticated-user-id` and `oai-authenticated-user-email`. Private Sites require every visitor to sign in; public Sites may also have anonymous visitors, for whom neither header is present.
-
-The user ID is stable for the same user on the same Site and different across Sites. Use it as the durable user key; use email and name for display or contact purposes.
-
-SIWC-authenticated workspace sites may also receive `oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty `name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by `oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const userId = requestHeaders.get("oai-authenticated-user-id");
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+app/                 應用程式入口與路由
+functions/api/       Cloudflare Pages Functions
+lib/                 音樂理論與聲音工具原始碼
+public/              網站頁面、樣式、前端腳本與靜態資源
+data/                創作者資料
+scripts/             建置與執行腳本
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+### 本機開發
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs optional or required ChatGPT sign-in:
+需求：Node.js 22.13.0 或以上版本。
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use the returned `userId` as the stable user key for user-owned records; do not use email as a durable identifier.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send anonymous visitors through Sign in with ChatGPT.
-- In a Server Component, start sign-in with `<a href={chatGPTSignInPath(returnTo)} target="_top">`. The auth helper module is server-only; do not import it into a Client Component.
-- Do not use `fetch`, XHR, a client-side router, or a framework link that can prefetch the sign-in route. SIWC must start as a top-level navigation.
-- Never request the AuthAPI authorization endpoint directly. The dispatch-owned `/signin-with-chatgpt` route must start the SIWC flow.
-- Use `chatGPTSignOutPath(returnTo)` for browser sign-out links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because they depend on per-request identity headers.
-
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the OAuth cookies, and identity header injection. Do not implement app routes for those reserved paths. Routes that do not import and call the helper remain anonymous-compatible.
-
-SIWC establishes identity only; it does not prove workspace membership. Use the Sites hosting platform's access policy controls for workspace-wide restrictions, or enforce explicit server-side membership or allowlist checks.
-
-Use SIWC for account pages, user-specific dashboards, saved records, and write actions tied to the current ChatGPT user. Leave public content anonymous.
-
-## Local D1 migrations
-
-For a D1-backed local preview, generate SQL with `npm run db:generate`. Build once through the Sites skill's build entrypoint (or `npm run build` for standalone use) to generate `dist/server/wrangler.json`, rebuilding if bindings change. From the project root, apply each pending migration in order:
-
-```sh
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_example.sql
+```bash
+npm ci
+npm run dev
 ```
 
-Replace the filename with the pending migration and `DB` with your D1 binding name if different. Use `.wrangler/state`, not `.wrangler/state/v3`; Wrangler adds the versioned directories. Do not replay migrations already applied locally. This updates only the preview database; publishing applies production migrations separately.
+常用指令：
 
-## Diagnostic Commands
+```bash
+npm run build
+npm run lint
+npm run start
+```
 
-- `npm run install:ci`: perform the one locked dependency install
-- `npm run dev`: start the Vite/Vinext development server
-- `npm run build`: build the deployable Sites artifact
-- `npm run start`: preview the built Worker locally with D1/R2 support
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+### Cloudflare 設定
 
-When using the Sites plugin, follow its skill instructions for installation, builds, and publishing. These npm commands remain available for standalone use.
+Cloudflare Pages 專案連接 `main` 分支後，可在每次推送時自動建置與部署。
 
-The portable build runs Vinext directly without a host `timeout` command. The managed-linux build uses `scripts/build-verified.sh` and its existing `SITES_BUILD_TIMEOUT` setting.
+表單寄信所需環境變數：
 
-## Learn More
+```text
+RESEND_API_KEY       必填，Resend API 金鑰
+RESEND_FROM_EMAIL    選填，已驗證的寄件地址
+```
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+請勿將 API Key、密碼或其他敏感資料提交到 GitHub。
+
+### 專案狀態
+
+Music Labs 目前為持續開發中的 V1。接下來會逐步擴充樂理內容、創作工具、Discover 更新流程與創作者頁面。
+
+---
+
+## English
+
+### About Music Labs
+
+Music theory should be more than text and formulas. Music Labs lets users see, hear, and interact with chords, scales, and progressions—turning abstract concepts into practical intuition for songwriting, arranging, and music production.
+
+The experience follows four core stages: **Learn → Practice → Create → Discover**.
+
+- **Learn** chords, scales, modes, intervals, and note structures.
+- **Practice** with focused quizzes and concise explanations.
+- **Create** with practical tools for progressions, transposition, tempo, delay timing, and harmony.
+- **Discover** useful software, plugins, AI music tools, resources, and production news.
+- **Community** gives artists a reviewed way to submit and showcase their work.
+
+### Key Features
+
+- **Chord Explorer** — inspect chord formulas, notes, and intervals, then hear them instantly.
+- **Scale Explorer** — compare scales and modes on an interactive keyboard.
+- **Music Quiz** — practice by topic and difficulty with an explanation for every answer.
+- **Progression Lab** — generate four-chord starting points by key and mood.
+- **Transpose** — transpose extended and slash chords quickly.
+- **BPM Calculator** — calculate note and delay times with Tap Tempo support.
+- **Circle of Fifths** — explore keys, signatures, and functional harmony.
+- **Discover** — browse selected music tools, free resources, AI music, and industry updates.
+- **Artists** — showcase approved creators, portfolios, and links.
+
+### Submissions and Feedback
+
+Artist submissions and feedback are validated by **Cloudflare Pages Functions** and delivered to the project maintainer through **Resend**.
+
+- Artist submissions are never published automatically.
+- Creator pages are added only after manual review.
+- API keys remain in encrypted Cloudflare environment variables and are never exposed to the browser.
+- Forms include field validation, same-origin checks, length limits, and honeypot spam protection.
+
+### Technology
+
+- HTML, CSS, and JavaScript
+- TypeScript
+- Web Audio API
+- Tonal.js
+- React 19 / Next.js 16 / Vinext / Vite
+- Cloudflare Pages and Pages Functions
+- Resend Email API
+
+### Project Structure
+
+```text
+app/                 Application entry points and routes
+functions/api/       Cloudflare Pages Functions
+lib/                 Music-theory and audio source modules
+public/              Pages, styles, browser scripts, and static assets
+data/                Artist data
+scripts/             Build and runtime helpers
+```
+
+### Local Development
+
+Requires Node.js 22.13.0 or later.
+
+```bash
+npm ci
+npm run dev
+```
+
+Common commands:
+
+```bash
+npm run build
+npm run lint
+npm run start
+```
+
+### Cloudflare Configuration
+
+Connect the Cloudflare Pages project to the `main` branch to build and deploy automatically after each push.
+
+Environment variables required for form delivery:
+
+```text
+RESEND_API_KEY       Required Resend API key
+RESEND_FROM_EMAIL    Optional verified sender address
+```
+
+Never commit API keys, passwords, or other sensitive information to GitHub.
+
+### Project Status
+
+Music Labs is currently an actively developed V1. Upcoming work will expand the theory library, creator tools, Discover publishing workflow, and approved artist profiles.
+
+---
+
+Created and maintained by [Derex Lee](https://github.com/derex0721).
