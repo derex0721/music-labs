@@ -15,21 +15,31 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/artists.css?v=20260912-2" />
+  <link rel="stylesheet" href="/artists.css?v=submission-format-1" />
 </head>
 <body>
   <a class="sr-only" href="#artistSubmitMain">Skip to content</a>
   <header class="artist-topbar"><a class="brand" href="/#home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><nav class="artist-nav"><a class="artists-link" href="/artists/">← Artists</a><button id="artistThemeToggle" class="theme-control" type="button" aria-label="切換色彩模式">☀</button></nav></header>
   <main class="submit-shell wrap" id="artistSubmitMain">
-    <p class="eyebrow">COMMUNITY / ARTIST SUBMISSION</p><h1>加入創作者聚落</h1><p class="intro">我們目前以邀請制為主。如果你希望被收錄，請提交作品與創作方向；資料會直接送到 Music Labs，不需要另外開啟 Email App。</p>
-    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" action="/api/artist-submissions">
+    <p class="eyebrow">COMMUNITY / ARTIST SUBMISSION</p><h1>加入創作者聚落</h1><p class="intro">填寫以下資料，讓我們認識你的音樂。投稿會寄送給 Music Labs 編輯，審核後才會公開，不會自動刊登。</p>
+    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" enctype="multipart/form-data" action="/api/artist-submissions">
       <p class="honeypot"><label>請勿填寫此欄位 <input name="bot-field" /></label></p>
-      <label>NAME / ARTIST NAME<input name="name" maxlength="80" required autocomplete="name" /></label>
-      <label>EMAIL<input name="email" type="email" maxlength="160" required autocomplete="email" /></label>
-      <label>ROLE<select name="role" required><option value="">請選擇</option><option>Producer</option><option>Guitarist</option><option>Vocalist</option><option>DJ</option><option>Composer</option></select></label>
-      <label>PORTFOLIO URL<input name="portfolio" type="url" placeholder="https://" required inputmode="url" /></label>
-      <label>ONE-LINE INTRO<textarea name="intro" maxlength="300" required></textarea></label>
-      <button class="btn" type="submit">SUBMIT YOUR WORK →</button><p class="form-status" id="submitStatus" role="status" aria-live="polite"></p>
+      <p>＊為必填。英文介紹、照片與社群連結可稍後補充。</p>
+      <label>創作者／藝名 ＊<input name="name" maxlength="80" required autocomplete="name" /></label>
+      <label>聯絡 Email ＊（僅供聯繫，不公開）<input name="email" type="email" maxlength="160" required autocomplete="email" /></label>
+      <label>創作角色 ＊<select name="role" required><option value="">請選擇</option><option value="Producer">製作人</option><option value="Guitarist">吉他手</option><option value="Vocalist">歌手</option><option value="DJ">DJ</option><option value="Composer">作曲者</option></select></label>
+      <label>中文介紹 ＊<textarea name="intro" maxlength="2000" required placeholder="介紹你的創作起點、擅長的音樂領域，以及想與聽眾分享的故事。"></textarea></label>
+      <label>英文介紹（選填）<textarea name="introEn" maxlength="3000" placeholder="沒有英文介紹可留空，由編輯協助翻譯。"></textarea></label>
+      <label>作品名稱（選填）<input name="workTitle" maxlength="200" /></label>
+      <label>作品／頻道連結 ＊<textarea name="portfolio" maxlength="6000" required placeholder="https://www.youtube.com/…&#10;https://open.spotify.com/…&#10;每行一個網址，最多 5 個。"></textarea></label>
+      <label>社群／官方網站（選填）<textarea name="socials" maxlength="6000" placeholder="https://www.instagram.com/…&#10;每行一個網址，最多 5 個。"></textarea></label>
+      <label>頭像或作品封面（選填）<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" /><small>上傳一張 JPG、PNG 或 WebP，最大 3 MB；照片只會作為投稿郵件附件，審核後才刊登。</small></label>
+      <label>照片分享連結（選填）<input name="photoUrl" type="url" maxlength="2000" placeholder="無法上傳時，可提供可檢視的 https:// 分享網址" /></label>
+      <label>作品風格／分類 ＊<input name="genres" maxlength="200" required placeholder="例如：流行、異國、民謠" /></label>
+      <label>希望的位置、排序或其他補充（選填）<textarea name="placement" maxlength="1000" placeholder="沒有偏好可留空；實際刊登位置由編輯安排。"></textarea></label>
+      <label class="consent-row"><input name="consent" type="checkbox" value="yes" required /><span>我確認有權提供以上文字、圖片與連結，並同意 Music Labs 審核後公開刊登（聯絡 Email 不公開）。＊</span></label>
+      <label class="consent-row"><input name="editConsent" type="checkbox" value="yes" /><span>我同意編輯在不改變原意的前提下潤飾介紹，並協助翻譯英文。</span></label>
+      <button class="btn" type="submit">送出創作者投稿 →</button><p class="form-status" id="submitStatus" role="status" aria-live="polite"></p>
     </form>
     <section class="submission-success" id="artistSubmitSuccess" role="status" aria-live="polite" hidden><span>✓</span><h2>Submission received.</h2><p>我們已收到你的作品資料，確認後會再與你聯繫。</p><a class="btn secondary" href="/artists/">BACK TO ARTISTS</a></section>
   </main>
