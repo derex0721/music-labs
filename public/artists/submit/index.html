@@ -8,8 +8,8 @@
   <meta property="og:type" content="website" />
   <meta property="og:title" content="加入創作者聚落 — Music Labs" />
   <meta property="og:description" content="提交你的音樂作品與創作方向，申請加入 Music Labs。" />
-  <meta property="og:url" content="https://musiclabs-derex.netlify.app/artists/submit/" />
-  <link rel="canonical" href="https://musiclabs-derex.netlify.app/artists/submit/" />
+  <meta property="og:url" content="https://music-labs.pages.dev/artists/submit/" />
+  <link rel="canonical" href="https://music-labs.pages.dev/artists/submit/" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <title>加入創作者聚落 — Music Labs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -22,8 +22,7 @@
   <header class="artist-topbar"><a class="brand" href="/#home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><nav class="artist-nav"><a class="artists-link" href="/artists/">← Artists</a><button id="artistThemeToggle" class="theme-control" type="button" aria-label="切換色彩模式">☀</button></nav></header>
   <main class="submit-shell wrap" id="artistSubmitMain">
     <p class="eyebrow">COMMUNITY / ARTIST SUBMISSION</p><h1>加入創作者聚落</h1><p class="intro">我們目前以邀請制為主。如果你希望被收錄，請提交作品與創作方向；資料會直接送到 Music Labs，不需要另外開啟 Email App。</p>
-    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-      <input type="hidden" name="form-name" value="artist-submission" /><input type="hidden" name="subject" value="Music Labs 創作者聚落申請" />
+    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" action="/api/artist-submissions">
       <p class="honeypot"><label>請勿填寫此欄位 <input name="bot-field" /></label></p>
       <label>NAME / ARTIST NAME<input name="name" maxlength="80" required autocomplete="name" /></label>
       <label>EMAIL<input name="email" type="email" maxlength="160" required autocomplete="email" /></label>
