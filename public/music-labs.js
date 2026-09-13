@@ -1,6 +1,9 @@
-import { MusicSynth } from './music-synth.js?v=20260912-3';
+import { MusicSynth } from './music-synth.js?v=2';
 
 const synth=new MusicSynth();
+window.addEventListener('blur',()=>synth.allNotesOff());
+window.addEventListener('pagehide',()=>synth.allNotesOff());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)synth.allNotesOff()});
 const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 const html=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const pulse=(element,duration=220)=>{if(!element)return;clearTimeout(element._pulseTimer);element.classList.remove('is-playing');void element.offsetWidth;element.classList.add('is-playing');element._pulseTimer=setTimeout(()=>element.classList.remove('is-playing'),duration)};

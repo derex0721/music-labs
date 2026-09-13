@@ -1,4 +1,4 @@
-import { MusicSynth } from './music-synth.js?v=20260912-3';
+import { MusicSynth } from './music-synth.js?v=2';
 import { getAdvancedChords, getAdvancedScales } from './music-theory-data.js';
 
 const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
@@ -71,7 +71,10 @@ function markAudioError(error){document.documentElement.dataset.audioState='bloc
 document.addEventListener('pointerdown',()=>synth.unlock().then(markAudioReady).catch(markAudioError),{once:true,capture:true});
 addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey||!document.querySelector('[data-page="chords"]')?.classList.contains('active')||e.repeat||['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)||e.target.isContentEditable)return;const key=e.key.toLowerCase(),note=keyboard[key];if(!note)return;e.preventDefault();held.add(key);synth.attack(note).then(markAudioReady).catch(markAudioError);document.querySelector(`#keyboardMap [data-key="${key}"]`)?.classList.add('active');document.querySelector(`#chordPiano [data-note="${note}"]`)?.classList.add('is-playing')});
 addEventListener('keyup',e=>{const key=e.key.toLowerCase(),note=keyboard[key];if(!note||!held.has(key))return;held.delete(key);synth.releaseNote(note);document.querySelector(`#keyboardMap [data-key="${key}"]`)?.classList.remove('active');document.querySelector(`#chordPiano [data-note="${note}"]`)?.classList.remove('is-playing')});
-addEventListener('blur',()=>{held.clear();synth.releaseAll();document.querySelectorAll('#keyboardMap .active,#chordPiano .is-playing').forEach(x=>x.classList.remove('active','is-playing'))});
+function stopHiddenAudio(){held.clear();stopProgressionLoop();synth.allNotesOff();document.querySelectorAll('#keyboardMap .active,#chordPiano .is-playing').forEach(x=>x.classList.remove('active','is-playing'))}
+addEventListener('blur',stopHiddenAudio);
+addEventListener('pagehide',stopHiddenAudio);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopHiddenAudio()});
 
 let libraryMode='chord',libraryCategory='全部';
 function renderLibrary(){const root=document.getElementById('libraryRoot').value,categories=libraryMode==='chord'?CHORD_CATEGORIES:SCALE_CATEGORIES,items=libraryMode==='chord'?chords(root):scales(root);document.getElementById('libraryFilters').innerHTML=['全部',...categories].map(c=>`<button data-category="${c}" class="${c===libraryCategory?'active':''}">${c}</button>`).join('');const filtered=libraryCategory==='全部'?items:items.filter(x=>x.category===libraryCategory);document.getElementById('libraryTitle').textContent=libraryMode==='chord'?'進階和弦資料庫':'進階音階資料庫';document.getElementById('libraryCount').textContent=`${filtered.length} ITEMS`;document.getElementById('libraryGrid').innerHTML=filtered.map(x=>`<button class="library-card group rounded-xl border p-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg" data-id="${x.id}"><small>${x.category}</small><strong>${x.name}</strong><span>${x.notes.join(' · ')}</span><em>${x.intervals.map(pretty).join(' / ')}</em></button>`).join('')}
