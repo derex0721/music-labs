@@ -22,6 +22,7 @@ const tools=[
 ];
 
 const discoverItems=[
+  {category:'Software',code:'BAND',title:'BandBuddy：本機分軌與樂器練習工作站',summary:'支援本機音軌分離、A–B 循環、變速與移調，搭配節拍器及練習錄音，協助拆解歌曲、反覆練習。提供 Windows／macOS 版本。',date:'2026-09-13',source:'BandBuddy · GitHub',url:'https://github.com/dourgey/BandBuddy'},
   {category:'AI Music',code:'UMG × 11',title:'UMG × ElevenLabs：合作開發授權 AI 音樂創作平台',summary:'雙方簽署多年合作協議，規劃以授權音樂支援 Remix、Mashup 與個人化聲音體驗。',date:'2026-09-10',source:'Universal Music Group',url:'https://www.universalmusic.com/universal-music-group-and-elevenlabs-announce-multi-year-strategic-agreement-beginning-with-a-new-licensed-ai-music-creation-platform/'},
   {category:'Plugins',code:'EQ',title:'iZotope Ozone EQ：免費母帶等化器',summary:'提供動態顯示、Transient／Sustain、Mid／Side 處理與即時 Gain Match。',date:'2026-09-11',source:'Plugin Boutique',url:'https://www.pluginboutique.com/product/2-Effects/16-EQ/11504-iZotope-Ozone-EQ'},
   {category:'Free Resources',code:'MASTER',title:'Vanity Lite：免費母帶處理 Plugin',summary:'分析音色、動態、響度與立體聲影像後建立四種母帶版本，支援 AU／VST3。',date:'2026-09-11',source:'AngelicVibes',url:'https://www.angelicvibes.com/vanity-lite/'},
