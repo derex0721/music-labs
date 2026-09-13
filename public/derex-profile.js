@@ -1,0 +1,1 @@
+document.getElementById('language').onclick=function(){const english=document.documentElement.lang!=='en';document.documentElement.lang=english?'en':'zh-Hant';this.textContent=english?'繁體中文':'English';this.setAttribute('aria-label',english?'切換為繁體中文':'Switch to English')};

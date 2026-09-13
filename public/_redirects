@@ -10,5 +10,7 @@
 /discover                 /index.html#discover            200
 /artists                  /artists/index.html            200
 /artists/submit           /artists/submit/index.html     200
+/artists/derex           /artists/derex/index.html       200
+/artists/derex/          /artists/derex/index.html       200
 /artists/*                /artists/index.html            200
 /*                        /index.html                    200

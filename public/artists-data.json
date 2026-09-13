@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "derex",
+    "name": "李泊崴 / derex",
+    "role": "Composer",
+    "theme": "blue",
+    "initials": "derex",
+    "photo": "/images/artists/derex.jpg",
+    "genres": [
+      "流行",
+      "異國",
+      "民謠"
+    ],
+    "bio": "從第一首原創歌曲出發，在流行、異國與民謠之間尋找旋律靈感。",
+    "works": [],
+    "posts": [],
+    "featuredTools": [],
+    "socialLinks": {
+      "youtube": "https://www.youtube.com/@derexlee6898",
+      "instagram": "https://www.instagram.com/musicway666/"
+    }
+  }
+]
