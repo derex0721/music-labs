@@ -4,6 +4,7 @@ const synth=new MusicSynth();
 const NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
 const html=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const pulse=(element,duration=220)=>{if(!element)return;clearTimeout(element._pulseTimer);element.classList.remove('is-playing');void element.offsetWidth;element.classList.add('is-playing');element._pulseTimer=setTimeout(()=>element.classList.remove('is-playing'),duration)};
+const trackEvent=(name,props={})=>{try{window.gtag?.('event',name,props);window.plausible?.(name,{props})}catch(error){/* analytics are optional */}};
 
 const learnItems=[
   {index:'01',label:'LEARN',title:'Chord Explorer',description:'看見組成音、公式與音程，立即播放並加入和弦進行。',href:'/#chords',action:'EXPLORE CHORDS'},
@@ -12,17 +13,17 @@ const learnItems=[
 ];
 
 const tools=[
-  {icon:'4×',title:'Progression Lab',description:'依情緒與調性取得四和弦創作起點。',href:'/tools/progression-lab',status:'READY'},
+  {icon:'4×',title:'Progression Lab',description:'依情緒與調性取得四和弦創作起點。',href:'/#progression-lab',status:'READY'},
   {icon:'⌁',title:'Chord Finder',description:'探索基礎與進階和弦，聆聽並理解結構。',href:'/#chords',status:'READY'},
   {icon:'△',title:'Scale Finder',description:'探索調式、藍調與對稱音階。',href:'/#scales',status:'READY'},
-  {icon:'↕',title:'Transpose',description:'快速移調並保留和弦延伸音。',href:'/tools/transpose',status:'READY'},
-  {icon:'×2',title:'BPM Calculator',description:'換算 Delay 時值，支援 Tap Tempo。',href:'/tools/bpm-calculator',status:'READY'},
-  {icon:'○',title:'Circle of Fifths',description:'互動查看調號與常用功能和弦。',href:'/tools/circle-of-fifths',status:'READY'},
-  {icon:'TAP',title:'Tap Tempo',description:'用點擊快速抓出歌曲或靈感的速度。',href:'/tools/bpm-calculator',status:'READY'}
+  {icon:'↕',title:'Transpose',description:'快速移調並保留和弦延伸音。',href:'/#transpose',status:'READY'},
+  {icon:'×2',title:'BPM Calculator',description:'換算 Delay 時值，支援 Tap Tempo。',href:'/#bpm',status:'READY'},
+  {icon:'○',title:'Circle of Fifths',description:'互動查看調號與常用功能和弦。',href:'/#circle-of-fifths',status:'READY'},
+  {icon:'TAP',title:'Tap Tempo',description:'用點擊快速抓出歌曲或靈感的速度。',href:'/#bpm',status:'READY'}
 ];
 
 const discoverItems=[
-  {category:'Music Tech',code:'AIMC',title:'AIMC 2026：第 7 屆 AI 音樂創意國際會議',summary:'於 2026 年 9 月 16–18 日在德國柏林舉行，聚焦 AI 與音樂創作的交會，涵蓋生成式創作、演出系統、機器聆聽、音樂倫理與創作者工作流程。',date:'2026-09-16',source:'AIMC 2026',url:'https://aimc2026.org/home'},
+  {category:'Music Tech',code:'AIMC',title:'AIMC 2026：第 7 屆 AI 音樂創意國際會議',summary:'於 2026 年 9 月 16–18 日在德國柏林舉行，聚焦 AI 與音樂創作的交會，涵蓋生成式創作、演出系統、機器聆聽、音樂倫理與創作者工作流程。',date:'2026-09-16',eventEndDate:'2026-09-18',source:'AIMC 2026',url:'https://aimc2026.org/home'},
   {category:'Software',code:'BAND',title:'BandBuddy：本機分軌與樂器練習工作站',summary:'支援本機音軌分離、A–B 循環、變速與移調，搭配節拍器及練習錄音，協助拆解歌曲、反覆練習。提供 Windows／macOS 版本；近期也推出 Android／iOS 版本。',date:'2026-09-13',source:'BandBuddy · GitHub',url:'https://github.com/dourgey/BandBuddy'},
   {category:'AI Music',code:'UMG × 11',title:'UMG × ElevenLabs：合作開發授權 AI 音樂創作平台',summary:'雙方簽署多年合作協議，規劃以授權音樂支援 Remix、Mashup 與個人化聲音體驗。',date:'2026-09-10',source:'Universal Music Group',url:'https://www.universalmusic.com/universal-music-group-and-elevenlabs-announce-multi-year-strategic-agreement-beginning-with-a-new-licensed-ai-music-creation-platform/'},
   {category:'Plugins',code:'EQ',title:'iZotope Ozone EQ：免費母帶等化器',summary:'提供動態顯示、Transient／Sustain、Mid／Side 處理與即時 Gain Match。',date:'2026-09-11',source:'Plugin Boutique',url:'https://www.pluginboutique.com/product/2-Effects/16-EQ/11504-iZotope-Ozone-EQ'},
@@ -67,14 +68,16 @@ document.querySelectorAll('.nav-trigger').forEach(button=>button.addEventListene
 document.addEventListener('click',event=>{if(!event.target.closest('.nav-group'))document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'))});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));document.getElementById('mobileNav')?.classList.remove('open');menuButton?.setAttribute('aria-expanded','false')}});
 
-document.getElementById('homeLearn').innerHTML=learnItems.map(item=>`<a class="learn-card" href="${item.href}"><span class="learn-index">${item.index}</span><small>${item.label}</small><h3>${item.title}</h3><p>${item.description}</p><b>${item.action} →</b></a>`).join('');
+document.getElementById('homeLearn').innerHTML=learnItems.map(item=>`<a class="learn-card" data-analytics-event="learning_step" href="${item.href}"><span class="learn-index">${item.index}</span><small>${item.label}</small><h3>${item.title}</h3><p>${item.description}</p><b>${item.action} →</b></a>`).join('');
 const primaryTools=['Progression Lab','Circle of Fifths','Transpose','BPM Calculator'];
-document.getElementById('homeTools').innerHTML=tools.filter(tool=>primaryTools.includes(tool.title)).map(tool=>`<a class="creator-tool-card" href="${tool.href}"><span class="tool-icon">${tool.icon}</span><div><small>${tool.status}</small><h3>${tool.title}</h3><p>${tool.description}</p></div><b>↗</b></a>`).join('');
-document.getElementById('toolsPage').innerHTML=tools.map((tool,index)=>`<article class="tool-card product-tool-card"><header><span class="tool-icon">${tool.icon}</span><small>${String(index+1).padStart(2,'0')} / ${tool.status}</small></header><h3>${tool.title}</h3><p>${tool.description}</p><a class="tool-open-link" href="${tool.href}">OPEN TOOL →</a></article>`).join('');
+document.getElementById('homeTools').innerHTML=tools.filter(tool=>primaryTools.includes(tool.title)).map(tool=>`<a class="creator-tool-card" data-analytics-event="tool_open" href="${tool.href}"><span class="tool-icon">${tool.icon}</span><div><small>${tool.status}</small><h3>${tool.title}</h3><p>${tool.description}</p></div><b>↗</b></a>`).join('');
+document.getElementById('toolsPage').innerHTML=tools.map((tool,index)=>`<article class="tool-card product-tool-card"><header><span class="tool-icon">${tool.icon}</span><small>${String(index+1).padStart(2,'0')} / ${tool.status}</small></header><h3>${tool.title}</h3><p>${tool.description}</p><a class="tool-open-link" data-analytics-event="tool_open" href="${tool.href}">OPEN TOOL →</a></article>`).join('');
 
-function discoverCard(item){return `<a class="news-card" data-cat="${html(item.category)}" href="${html(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open original source: ${html(item.title)}"><div class="news-visual"><span>${html(item.code)}</span></div><div class="news-body"><span class="tag">${html(item.category)}</span><h3>${html(item.title)}</h3><p>${html(item.summary)}</p><time datetime="${html(item.date)}">${html(item.date)} · ${html(item.source)} <b>↗</b></time></div></a>`}
-document.getElementById('homeNews').innerHTML=discoverItems.slice(0,3).map(discoverCard).join('');
-document.getElementById('newsPageGrid').innerHTML=discoverItems.map(discoverCard).join('');
+function discoverStatus(item){if(!item.eventEndDate)return'';const now=new Date();const start=new Date(`${item.date}T00:00:00`);const end=new Date(`${item.eventEndDate}T23:59:59`);return now<start?'即將開始':now<=end?'進行中':'已結束'}
+function discoverCard(item){const status=discoverStatus(item);return `<a class="news-card" data-cat="${html(item.category)}" data-analytics-event="discover_open" href="${html(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open original source: ${html(item.title)}"><div class="news-visual"><span>${html(item.code)}</span></div><div class="news-body"><span class="tag">${html(item.category)}</span>${status?`<span class="event-status">${status}</span>`:''}<h3>${html(item.title)}</h3><p>${html(item.summary)}</p><time datetime="${html(item.date)}">${html(item.date)} · ${html(item.source)} <b>↗</b></time></div></a>`}
+const latestDiscoverItems=[...discoverItems].sort((a,b)=>b.date.localeCompare(a.date));
+document.getElementById('homeNews').innerHTML=latestDiscoverItems.slice(0,3).map(discoverCard).join('');
+document.getElementById('newsPageGrid').innerHTML=latestDiscoverItems.map(discoverCard).join('');
 const discoverCategories=[
   {label:'All',slug:'all',intro:'為音樂創作者篩選值得關注的工具、資源與技術動態。'},
   {label:'AI Music',slug:'ai-music',intro:'生成音樂、智慧配樂、聲音模型與 AI 輔助創作工具。'},
@@ -104,6 +107,7 @@ const normalizeSearch=value=>String(value||'').normalize('NFKC').toLocaleLowerCa
 function syncDiscover(){const hash=(location.hash||'#discover/all').slice(1).split('/');if(!['discover','news'].includes(hash[0]))return;const selected=discoverCategories.find(category=>category.slug===(hash[1]||'all'))||discoverCategories[0];const label=discoverCategoryLabel(selected.label);const chinese=discoverLocale().startsWith('zh');const query=normalizeSearch(discoverSearch?.value);document.getElementById('newsEyebrow').textContent=chinese?`探索 / ${label}`:`DISCOVER / ${selected.slug.toUpperCase()}`;document.getElementById('newsTitle').innerHTML=selected.label==='All'?'Music <em>Discover</em>':`Discover <em>${html(label)}</em>`;document.getElementById('newsIntro').textContent=selected.intro;document.querySelectorAll('#newsFilters a').forEach(link=>{const active=link.dataset.cat===selected.label;link.classList.toggle('active',active);if(active)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')});let visible=0;document.querySelectorAll('#newsPageGrid .news-card').forEach(card=>{const item=discoverItems.find(entry=>entry.url===card.href);const haystack=normalizeSearch([item?.title,item?.summary,item?.source,item?.category,discoverCategoryLabel(item?.category)].join(' '));const show=(selected.label==='All'||card.dataset.cat===selected.label)&&(!query||haystack.includes(query));card.hidden=!show;if(show)visible++});if(discoverSearchClear)discoverSearchClear.hidden=!query;if(discoverSearchStatus)discoverSearchStatus.textContent=query?`${visible} 個搜尋結果`:'';if(discoverEmpty)discoverEmpty.hidden=visible!==0;renderDiscoverCategoryLabels()}
 discoverSearch?.addEventListener('input',syncDiscover);
 discoverSearchClear?.addEventListener('click',()=>{discoverSearch.value='';discoverSearch.focus();syncDiscover()});
+document.addEventListener('click',event=>{const target=event.target.closest('[data-analytics-event]');if(target)trackEvent(target.dataset.analyticsEvent,{label:(target.querySelector('h3')?.textContent||target.textContent||'').trim().slice(0,80)})});
 addEventListener('hashchange',syncDiscover);syncDiscover();
 document.getElementById('langSelect')?.addEventListener('change',()=>{renderDiscoverCategoryLabels();syncDiscover()});
 
