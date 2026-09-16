@@ -1,10 +1,10 @@
-/tools/transpose          /index.html#transpose          301
-/tools/bpm                /index.html#bpm                301
-/tools/bpm-calculator     /index.html#bpm                301
-/tools/ai-chords          /index.html#progression-lab    301
-/tools/progression-lab    /index.html#progression-lab    301
-/tools/circle-of-fifths   /index.html#circle-of-fifths   301
-/chords-scales            /index.html#chords-scales      301
+/tools/transpose          /index.html?route=transpose          301
+/tools/bpm                /index.html?route=bpm                301
+/tools/bpm-calculator     /index.html?route=bpm                301
+/tools/ai-chords          /index.html?route=progression-lab    301
+/tools/progression-lab    /index.html?route=progression-lab    301
+/tools/circle-of-fifths   /index.html?route=circle-of-fifths   301
+/chords-scales            /index.html?route=chords-scales      301
 /chords/*                 /index.html                    200
 /scales/*                 /index.html                    200
 /discover                 /index.html#discover            200

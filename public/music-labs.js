@@ -42,6 +42,8 @@ const discoverItems=[
 const routeAliases={news:'discover','ai-chords':'progression-lab','tool-overview':'tools'};
 function pageFromLocation(){
   if(location.hash){const raw=location.hash.slice(1).split('/')[0]||'home';return routeAliases[raw]||raw}
+  const queryRoute=new URLSearchParams(location.search).get('route');
+  if(queryRoute)return routeAliases[queryRoute]||queryRoute;
   const path=location.pathname.replace(/\/$/,'')||'/';
   if(/^\/chords\//.test(path))return'chords';
   if(/^\/scales\//.test(path))return'scales';
