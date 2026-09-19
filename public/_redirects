@@ -13,4 +13,12 @@
 /artists/derex           /artists/derex/index.html       200
 /artists/derex/          /artists/derex/index.html       200
 /artists/*                /artists/index.html            200
+/community                /community/index.html          200
+/community/               /community/index.html          200
+/works                    /works/index.html              200
+/works/                   /works/index.html              200
+/notes                    /notes/index.html              200
+/notes/                   /notes/index.html              200
+/submit                   /artists/submit/index.html     200
+/submit/                  /artists/submit/index.html     200
 /*                        /index.html                    200
