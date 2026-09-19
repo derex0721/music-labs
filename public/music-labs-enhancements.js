@@ -1,7 +1,7 @@
 const COPY={
-  'zh-Hant':{heroLead:'查和弦、找音階、練習樂理、產生和弦進行，一個為現代音樂創作者打造的互動音樂工具箱。',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
-  'zh-Hans':{heroLead:'查和弦、找音阶、练习乐理、产生和弦进行，一个为现代音乐创作者打造的互动音乐工具箱。',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
-  en:{heroLead:'Interactive music theory, practice, chord progressions and practical tools built for modern creators.',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
+  'zh-Hant':{heroLead:'互動樂理、創作工具，以及音樂創作者的作品與故事。',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
+  'zh-Hans':{heroLead:'互动乐理、创作工具，以及音乐创作者的作品与故事。',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
+  en:{heroLead:'Interactive music theory, creator tools, and the work and stories of music makers.',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
   ja:{heroLead:'コード、スケール、理論練習、コード進行を一つに。現代の音楽クリエイターのためのインタラクティブツールボックス。',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
   ko:{heroLead:'코드, 스케일, 음악 이론 연습과 코드 진행을 한곳에서 경험하는 현대 크리에이터용 인터랙티브 도구입니다.',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'},
   fr:{heroLead:'Théorie interactive, entraînement, progressions d’accords et outils pratiques pour les créateurs modernes.',exploreChords:'Explore Chords',takeQuiz:'Take a Quiz',exploreTools:'Explore Tools'}
