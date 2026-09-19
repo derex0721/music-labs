@@ -23,14 +23,16 @@
   {
     "id": "summer",
     "name": "Summer",
-    "role": "Artist",
     "theme": "violet",
     "initials": "SUMMER",
     "photo": "/images/artists/summer-avatar.webp",
     "genres": [
       "Alternative R&B"
     ],
-    "bio": "喜歡像泡在夜晚房間裡很舒服安全的音樂和視覺，用這兩個東西留下一點當下的想法",
+    "bio": {
+      "zh": "喜歡像泡在夜晚房間裡很舒服安全的音樂和視覺，用這兩個東西留下一點當下的想法",
+      "en": "I like music and visuals that feel like being wrapped in the comfort and safety of a room at night. I use both to hold onto small thoughts from the moment."
+    },
     "works": [
       {
         "title": "empty",
