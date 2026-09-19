@@ -12,6 +12,8 @@
 /artists/submit           /artists/submit/index.html     200
 /artists/derex           /artists/derex/index.html       200
 /artists/derex/          /artists/derex/index.html       200
+/artists/summer          /artists/summer/index.html      200
+/artists/summer/         /artists/summer/index.html      200
 /artists/*                /artists/index.html            200
 /community                /community/index.html          200
 /community/               /community/index.html          200
