@@ -1,3 +1,14 @@
+function mountCommunityShell(){
+  document.body.classList.add('community-page');
+  ['/community-pages.css?v=20260919-1','/mode-switch.css?v=20260919-1'].forEach(href=>{if(!document.querySelector(`link[href="${href}"]`)){const link=document.createElement('link');link.rel='stylesheet';link.href=href;document.head.append(link)}});
+  const header=document.querySelector('.artist-topbar');
+  if(!header||header.querySelector('.mode-switch'))return;
+  header.classList.add('community-topbar');
+  header.querySelector('.brand')?.insertAdjacentHTML('afterend','<nav class="mode-switch" aria-label="Music Labs 主要模式" role="tablist"><a href="/#home" role="tab" data-mode="wiki" aria-selected="false"><span>音樂百科</span><small>Music Wiki</small></a><a href="/community/" role="tab" data-mode="community" aria-selected="true"><span>音樂人聚落</span><small>Artist Community</small></a></nav>');
+  const nav=header.querySelector('.artist-nav');
+  if(nav){nav.className='community-nav';nav.innerHTML='<a href="/community/">聚落首頁</a><a href="/artists/">音樂人</a><a href="/works/">作品</a><a href="/notes/">創作筆記</a><a href="/artists/submit/">投稿</a><button id="artistThemeToggle" data-theme-toggle class="theme-control" type="button" aria-label="切換色彩模式">☀</button>'}
+}
+mountCommunityShell();
 const themeToggle=document.getElementById('artistThemeToggle');
 const savedTheme=localStorage.getItem('ml-theme')||'dark';
 document.documentElement.dataset.theme=savedTheme;
