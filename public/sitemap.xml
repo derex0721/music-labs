@@ -11,6 +11,9 @@
   <url><loc>https://music-labs.pages.dev/tools/bpm-calculator</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://music-labs.pages.dev/tools/circle-of-fifths</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://music-labs.pages.dev/discover</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://music-labs.pages.dev/community/</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://music-labs.pages.dev/artists/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://music-labs.pages.dev/works/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://music-labs.pages.dev/notes/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://music-labs.pages.dev/artists/submit/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
 </urlset>
