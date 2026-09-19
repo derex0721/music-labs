@@ -28,6 +28,7 @@ const discoverItems=[
   {category:'Software',code:'BAND',title:'BandBuddy：本機分軌與樂器練習工作站',summary:'支援本機音軌分離、A–B 循環、變速與移調，搭配節拍器及練習錄音，協助拆解歌曲、反覆練習。提供 Windows／macOS 版本；近期也推出 Android／iOS 版本。',date:'2026-09-13',source:'BandBuddy · GitHub',url:'https://github.com/dourgey/BandBuddy'},
   {category:'AI Music',code:'UMG × 11',title:'UMG × ElevenLabs：合作開發授權 AI 音樂創作平台',summary:'雙方簽署多年合作協議，規劃以授權音樂支援 Remix、Mashup 與個人化聲音體驗。',date:'2026-09-10',source:'Universal Music Group',url:'https://www.universalmusic.com/universal-music-group-and-elevenlabs-announce-multi-year-strategic-agreement-beginning-with-a-new-licensed-ai-music-creation-platform/'},
   {category:'Plugins',code:'EQ',title:'iZotope Ozone EQ：免費母帶等化器',summary:'提供動態顯示、Transient／Sustain、Mid／Side 處理與即時 Gain Match。',date:'2026-09-11',source:'Plugin Boutique',url:'https://www.pluginboutique.com/product/2-Effects/16-EQ/11504-iZotope-Ozone-EQ'},
+  {category:'Plugins',code:'REASON',title:'Reason Free：免費集合 15 款經典 Reason 裝置的外掛',summary:'免費提供 Europa 合成器、Kong 鼓機、Echo 延遲、RV7000 MKII 混響等 15 款裝置，可作為 VST3／AU／AAX 外掛使用，也能獨立運行。',date:'2026-09-02',source:'MusicRadar',url:'https://www.musicradar.com/music-tech/plugins/reason-free-puts-15-classic-reason-devices-in-one-free-plugin-that-you-can-use-in-your-existing-daw'},
   {category:'Free Resources',code:'MASTER',title:'Vanity Lite：免費母帶處理 Plugin',summary:'分析音色、動態、響度與立體聲影像後建立四種母帶版本，支援 AU／VST3。',date:'2026-09-11',source:'AngelicVibes',url:'https://www.angelicvibes.com/vanity-lite/'},
   {category:'AI Music',code:'ACE',title:'ACE Studio：以 MIDI 與歌詞製作 AI 人聲',summary:'輸入 MIDI 與歌詞生成可編輯歌唱人聲，也提供 AI 樂器、合唱與聲音模型工具。',date:'2026-09-11',source:'ACE Studio',url:'https://acestudio.ai/'},
   {category:'AI Music',code:'AI',title:'Suno V6：改用授權音樂重新訓練',summary:'新一代模型強化結構、情緒與局部編輯控制，並提供不同使用取向的版本。',date:'2026-09-09',source:'MusicRadar',url:'https://www.musicradar.com/music-tech/suno-has-rebuilt-its-ai-music-models-from-scratch-with-licensed-music'},
@@ -41,6 +42,15 @@ const discoverItems=[
 ];
 
 const routeAliases={news:'discover','ai-chords':'progression-lab','tool-overview':'tools'};
+function syncSiteMode(){
+  const community=Boolean(document.body.dataset.communityMode==='true');
+  document.body.dataset.siteMode=community?'community':'wiki';
+  document.querySelectorAll('.mode-switch [data-mode]').forEach(link=>{const active=(link.dataset.mode==='community')===community;link.setAttribute('aria-selected',String(active));link.classList.toggle('active',active)});
+  document.querySelector('.wiki-navigation')?.toggleAttribute('hidden',community);
+  document.querySelector('.community-navigation')?.toggleAttribute('hidden',!community);
+  document.querySelector('.mobile-wiki-navigation')?.toggleAttribute('hidden',community);
+  document.querySelector('.mobile-community-navigation')?.toggleAttribute('hidden',!community);
+}
 function pageFromLocation(){
   if(location.hash){const raw=location.hash.slice(1).split('/')[0]||'home';return routeAliases[raw]||raw}
   const queryRoute=new URLSearchParams(location.search).get('route');
@@ -57,12 +67,14 @@ function route(){
   const section=['transpose','bpm','progression-lab','circle-of-fifths'].includes(name)?'tools':name;
   document.querySelectorAll('[data-nav]').forEach(link=>link.classList.toggle('active',link.dataset.nav===name||link.dataset.nav===section));
   document.querySelectorAll('.nav-group').forEach(group=>group.classList.toggle('active',Boolean(group.querySelector('[data-nav].active'))));
+  syncSiteMode();
   document.getElementById('mobileNav')?.classList.remove('open');
   document.getElementById('menuBtn')?.setAttribute('aria-expanded','false');
   document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));
   scrollTo(0,0);
 }
 addEventListener('hashchange',route);
+document.querySelectorAll('.mode-switch [data-mode]').forEach(link=>link.addEventListener('click',()=>{document.querySelectorAll('.mode-switch [data-mode]').forEach(item=>item.setAttribute('aria-selected',String(item===link)))}));
 route();
 
 const menuButton=document.getElementById('menuBtn');
