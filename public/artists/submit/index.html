@@ -4,46 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="color-scheme" content="dark light" />
-  <meta name="description" content="提交作品集，申請加入 Music Labs 創作者聚落。" />
+  <meta name="description" content="建立你的 Music Labs Artist Profile，提交後由 Music Labs 編輯審核。" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="加入創作者聚落 — Music Labs" />
-  <meta property="og:description" content="提交你的音樂作品與創作方向，申請加入 Music Labs。" />
+  <meta property="og:title" content="建立你的音樂人頁面 — Music Labs" />
+  <meta property="og:description" content="建立你的 Music Labs Artist Profile，提交後由 Music Labs 編輯審核。" />
   <meta property="og:url" content="https://music-labs.pages.dev/artists/submit/" />
   <link rel="canonical" href="https://music-labs.pages.dev/artists/submit/" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <title>加入創作者聚落 — Music Labs</title>
+  <title>建立你的音樂人頁面 — Music Labs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/artists.css?v=submission-format-1" />
+  <link rel="stylesheet" href="/artists.css?v=20260919-submit-v2" />
 </head>
 <body>
   <a class="sr-only" href="#artistSubmitMain">Skip to content</a>
-  <header class="artist-topbar"><a class="brand" href="/#home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><nav class="artist-nav"><a class="artists-link" href="/artists/">← Artists</a><button id="artistThemeToggle" class="theme-control" type="button" aria-label="切換色彩模式">☀</button></nav></header>
+  <header class="artist-topbar"><a class="brand" href="/#home" aria-label="Music Labs 首頁"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><nav class="artist-nav"><a class="artists-link" href="/artists/">← Artists</a><button id="artistThemeToggle" class="theme-control" type="button" aria-label="切換色彩模式">☀</button></nav></header>
   <main class="submit-shell wrap" id="artistSubmitMain">
-    <p class="eyebrow">COMMUNITY / ARTIST SUBMISSION</p><h1>加入創作者聚落</h1><p class="intro">填寫以下資料，讓我們認識你的音樂。投稿會寄送給 Music Labs 編輯，審核後才會公開，不會自動刊登。</p>
-    <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" enctype="multipart/form-data" action="/api/artist-submissions">
-      <p class="honeypot"><label>請勿填寫此欄位 <input name="bot-field" /></label></p>
-      <p>＊為必填。英文介紹、照片與社群連結可稍後補充。</p>
-      <label>創作者／藝名 ＊<input name="name" maxlength="80" required autocomplete="name" /></label>
-      <label>聯絡 Email ＊（僅供聯繫，不公開）<input name="email" type="email" maxlength="160" required autocomplete="email" /></label>
-      <label>創作角色 ＊<select name="role" required><option value="">請選擇</option><option value="Producer">製作人</option><option value="Guitarist">吉他手</option><option value="Vocalist">歌手</option><option value="DJ">DJ</option><option value="Composer">作曲者</option></select></label>
-      <label>中文介紹 ＊<textarea name="intro" maxlength="2000" required placeholder="介紹你的創作起點、擅長的音樂領域，以及想與聽眾分享的故事。"></textarea></label>
-      <label>英文介紹（選填）<textarea name="introEn" maxlength="3000" placeholder="沒有英文介紹可留空，由編輯協助翻譯。"></textarea></label>
-      <label>作品名稱（選填）<input name="workTitle" maxlength="200" /></label>
-      <label>作品／頻道連結 ＊<textarea name="portfolio" maxlength="6000" required placeholder="https://www.youtube.com/…&#10;https://open.spotify.com/…&#10;每行一個網址，最多 5 個。"></textarea></label>
-      <label>社群／官方網站（選填）<textarea name="socials" maxlength="6000" placeholder="https://www.instagram.com/…&#10;每行一個網址，最多 5 個。"></textarea></label>
-      <label>頭像或作品封面（選填）<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" /><small>上傳一張 JPG、PNG 或 WebP，最大 3 MB；照片只會作為投稿郵件附件，審核後才刊登。</small></label>
-      <label>照片分享連結（選填）<input name="photoUrl" type="url" maxlength="2000" placeholder="無法上傳時，可提供可檢視的 https:// 分享網址" /></label>
-      <label>作品風格／分類 ＊<input name="genres" maxlength="200" required placeholder="例如：流行、異國、民謠" /></label>
-      <label>希望的位置、排序或其他補充（選填）<textarea name="placement" maxlength="1000" placeholder="沒有偏好可留空；實際刊登位置由編輯安排。"></textarea></label>
-      <label class="consent-row"><input name="consent" type="checkbox" value="yes" required /><span>我確認有權提供以上文字、圖片與連結，並同意 Music Labs 審核後公開刊登（聯絡 Email 不公開）。＊</span></label>
-      <label class="consent-row"><input name="editConsent" type="checkbox" value="yes" /><span>我同意編輯在不改變原意的前提下潤飾介紹，並協助翻譯英文。</span></label>
-      <button class="btn" type="submit">送出創作者投稿 →</button><p class="form-status" id="submitStatus" role="status" aria-live="polite"></p>
-    </form>
-    <section class="submission-success" id="artistSubmitSuccess" role="status" aria-live="polite" hidden><span>✓</span><h2>Submission received.</h2><p>我們已收到你的作品資料，確認後會再與你聯繫。</p><a class="btn secondary" href="/artists/">BACK TO ARTISTS</a></section>
+    <p class="eyebrow">COMMUNITY / ARTIST PROFILE BUILDER</p>
+    <h1>建立你的音樂人頁面</h1>
+    <p class="intro">填寫以下資料，建立你的 Music Labs Artist Profile。投稿後會由 Music Labs 編輯審核，確認後公開刊登。</p>
+    <div class="submit-progress" aria-label="投稿步驟" role="tablist"><button class="active" type="button" data-step-tab="1" role="tab" aria-selected="true">01 <span>ABOUT YOU</span></button><button type="button" data-step-tab="2" role="tab" aria-selected="false">02 <span>VISUALS</span></button><button type="button" data-step-tab="3" role="tab" aria-selected="false">03 <span>MUSIC</span></button><button type="button" data-step-tab="4" role="tab" aria-selected="false">04 <span>LINKS &amp; PUBLISH</span></button></div>
+    <div class="submit-layout">
+      <form class="submit-form" id="artistSubmitForm" name="artist-submission" method="POST" enctype="multipart/form-data" action="/api/artist-submissions">
+        <p class="honeypot"><label>請勿填寫此欄位 <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <input type="hidden" name="status" value="pending" /><input type="hidden" name="publishMode" value="review" />
+        <p class="submit-required-note">＊為必填。Email 僅供 Music Labs 聯絡，不會公開在 Artist Profile。</p>
+        <section class="submit-step active" data-step="1" role="tabpanel"><div class="step-heading"><span>01</span><div><h2>ABOUT YOU</h2><p>先介紹你的名字、角色、曲風與創作方向。</p></div></div>
+          <label>Artist Name ＊<input id="artistName" name="name" maxlength="80" required autocomplete="name" placeholder="例如：Summer" /></label>
+          <label>Profile URL Slug <input id="artistSlug" name="slug" maxlength="80" readonly aria-readonly="true" placeholder="自動產生" /><small>由 Artist Name 自動產生，正式上架時會再檢查是否重複。</small></label>
+          <label>聯絡 Email ＊<input name="email" type="email" maxlength="160" required autocomplete="email" placeholder="you@example.com" /></label>
+          <fieldset class="choice-field"><legend>Roles（最多 5 個，選填）</legend><div class="choice-grid"><label><input type="checkbox" name="roles" value="singer" />Singer</label><label><input type="checkbox" name="roles" value="songwriter" />Songwriter</label><label><input type="checkbox" name="roles" value="composer" />Composer</label><label><input type="checkbox" name="roles" value="producer" />Producer</label><label><input type="checkbox" name="roles" value="instrumentalist" />Instrumentalist</label><label><input type="checkbox" name="roles" value="dj" />DJ</label><label><input type="checkbox" name="roles" value="band" />Band</label><label><input type="checkbox" name="roles" value="visual-artist" />Visual Artist</label><label><input type="checkbox" name="roles" value="other" />Other</label></div></fieldset>
+          <fieldset class="choice-field"><legend>Genres（最多 3 個）</legend><div class="choice-grid"><label><input type="checkbox" name="genres" value="pop" />Pop</label><label><input type="checkbox" name="genres" value="alternative-rnb" />Alternative R&amp;B</label><label><input type="checkbox" name="genres" value="rnb" />R&amp;B</label><label><input type="checkbox" name="genres" value="rock" />Rock</label><label><input type="checkbox" name="genres" value="indie" />Indie</label><label><input type="checkbox" name="genres" value="electronic" />Electronic</label><label><input type="checkbox" name="genres" value="hip-hop" />Hip-Hop</label><label><input type="checkbox" name="genres" value="jazz" />Jazz</label><label><input type="checkbox" name="genres" value="folk" />Folk</label><label><input type="checkbox" name="genres" value="world" />World</label><label><input type="checkbox" name="genres" value="classical" />Classical</label><label><input type="checkbox" name="genres" value="ambient" />Ambient</label><label><input type="checkbox" name="genres" value="experimental" />Experimental</label><label><input type="checkbox" name="genres" value="other" />Other</label></div><input class="other-input" name="genreOther" maxlength="50" placeholder="如果選 Other，請填寫分類" hidden /></fieldset>
+          <label>中文介紹 ＊<textarea id="bioZh" name="bioZh" maxlength="2000" minlength="40" required placeholder="不用寫正式履歷。可以描述你的聲音、創作方式、氣氛，或你希望別人從作品裡感受到什麼。建議 40～150 字。"></textarea></label>
+          <label>English Bio（Optional）<textarea id="bioEn" name="bioEn" maxlength="3000" placeholder="Describe your sound, process, atmosphere, or what you hope people feel through your work."></textarea></label>
+        </section>
+        <section class="submit-step" data-step="2" role="tabpanel" hidden><div class="step-heading"><span>02</span><div><h2>VISUALS</h2><p>Avatar 是 Artist Profile 的主要識別；作品封面會在下一步獨立上傳。</p></div></div>
+          <label>Artist Avatar ＊<input id="artistAvatar" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" required /><small>建議 1:1、1000 × 1000 以上。只接受 JPG、PNG、WebP，單檔最大 3 MB。</small></label>
+          <label>Profile / Hero Image（Optional）<input name="heroImage" type="file" accept="image/jpeg,image/png,image/webp" /><small>可用於 Artist Profile 的 editorial visual；沒有也可以。</small></label>
+          <div class="image-guidance"><strong>圖片會先在右側 Preview 顯示。</strong><span>作品 Artwork 不要放在這裡，請在 MUSIC 步驟上傳。</span></div>
+        </section>
+        <section class="submit-step" data-step="3" role="tabpanel" hidden><div class="step-heading"><span>03</span><div><h2>MUSIC</h2><p>至少提供一個作品；最多可先提交三個 Release。</p></div></div>
+          <div id="releaseFields"><div class="release-input-group" data-release-index="0"><div class="release-input-heading"><strong>Featured Release</strong></div><label>Release Title ＊<input name="releaseTitle[]" maxlength="160" required placeholder="例如：empty" /></label><div class="field-columns"><label>Release Type ＊<select name="releaseType[]" required><option value="Single">Single</option><option value="EP">EP</option><option value="Album">Album</option><option value="MV">MV</option><option value="Demo">Demo</option><option value="Live">Live</option><option value="Other">Other</option></select></label><label>Genre<select name="releaseGenre[]"><option value="">沿用上一步 Genre</option><option value="pop">Pop</option><option value="alternative-rnb">Alternative R&amp;B</option><option value="rnb">R&amp;B</option><option value="rock">Rock</option><option value="indie">Indie</option><option value="electronic">Electronic</option><option value="hip-hop">Hip-Hop</option><option value="jazz">Jazz</option><option value="folk">Folk</option><option value="ambient">Ambient</option><option value="experimental">Experimental</option><option value="other">Other</option></select></label></div><label>Release URL ＊<input name="releaseUrl[]" type="url" maxlength="1000" required placeholder="https://www.youtube.com/watch?v=..." /></label><label>Release Artwork（Optional）<input name="releaseArtwork[]" type="file" accept="image/jpeg,image/png,image/webp" /><small>建議 1:1、1500 × 1500 以上。單檔最大 3 MB。</small></label><label>Description（Optional）<textarea name="releaseDescription[]" maxlength="600" rows="3"></textarea></label></div></div>
+          <button class="text-link add-release" id="addRelease" type="button">＋ Add another release <span>（最多 3 個）</span></button>
+        </section>
+        <section class="submit-step" data-step="4" role="tabpanel" hidden><div class="step-heading"><span>04</span><div><h2>LINKS &amp; PUBLISH</h2><p>只填寫你希望公開在 Artist Profile 的連結。</p></div></div>
+          <div class="field-columns"><label>Instagram<input name="instagram" type="url" maxlength="500" placeholder="https://www.instagram.com/..." /></label><label>YouTube<input name="youtube" type="url" maxlength="500" placeholder="https://www.youtube.com/..." /></label><label>Spotify<input name="spotify" type="url" maxlength="500" placeholder="https://open.spotify.com/..." /></label><label>SoundCloud<input name="soundcloud" type="url" maxlength="500" placeholder="https://soundcloud.com/..." /></label><label>Bandcamp<input name="bandcamp" type="url" maxlength="500" placeholder="https://...bandcamp.com/..." /></label><label>Website<input name="website" type="url" maxlength="500" placeholder="https://example.com" /></label></div>
+          <label>給 Music Labs 編輯的補充資訊（Optional）<textarea name="editorNotes" maxlength="1200" placeholder="這些內容不會顯示在公開 Artist Profile。不要填寫排名或推薦順位。"></textarea><small>這些內容不會顯示在公開 Artist Profile。</small></label>
+          <label class="consent-row"><input name="consent" type="checkbox" value="yes" required /><span>我確認有權提供以上文字、圖片、作品與社群連結，並同意 Music Labs 審核後公開刊登。＊</span></label>
+          <label class="consent-row"><input name="rightsConsent" type="checkbox" value="yes" required /><span>我確認擁有或已取得所提供圖片與內容的使用權。＊</span></label>
+          <label class="consent-row"><input name="editConsent" type="checkbox" value="yes" /><span>我同意編輯在不改變原意的前提下潤飾介紹，並協助翻譯英文。</span></label>
+          <p class="review-note"><strong>Publish mode：Review</strong><br />投稿完成後會進入 Pending Review，不會直接公開。Music Labs 確認後才會建立 Artist Profile。</p>
+        </section>
+        <div class="step-actions"><button class="btn secondary" type="button" data-prev hidden>← Back</button><button class="btn" type="button" data-next>Next →</button><button class="btn" type="submit" hidden>送出並提交審核 →</button><p class="form-status" id="submitStatus" role="status" aria-live="polite"></p></div>
+      </form>
+      <aside class="submit-preview" aria-label="Artist Profile 即時預覽"><div class="preview-heading"><span class="eyebrow">LIVE PREVIEW</span><h2>Profile Preview</h2><p>這是你的 Music Labs Artist Profile 預覽，正式內容仍可能經過編輯審核。</p></div><div class="preview-card"><div class="preview-avatar-wrap"><img id="previewAvatar" alt="Artist Avatar preview" hidden /><span id="previewInitials">ARTIST</span></div><div class="preview-copy"><span class="preview-kicker">ARTIST PROFILE</span><h3 id="previewName">Your Artist Name</h3><div class="preview-tags" id="previewGenres"><span>Genre</span></div><p id="previewBio">你的中文介紹會顯示在這裡。</p><div class="preview-release" id="previewRelease" hidden><img id="previewArtwork" alt="Release artwork preview" hidden /><div><span>FEATURED RELEASE</span><strong id="previewReleaseTitle">Release title</strong><small id="previewReleaseType">Single</small></div></div><div class="preview-social" id="previewSocial" hidden>Instagram ↗</div></div></div></aside>
+    </div>
+    <section class="submission-success" id="artistSubmitSuccess" role="status" aria-live="polite" hidden><span>✓</span><h2>投稿完成</h2><p>你的 Artist Profile 已送交 Music Labs Review。</p><strong>狀態：Pending Review</strong><a class="btn secondary" href="/artists/">回到音樂人聚落</a></section>
   </main>
-  <footer class="artist-footer"><div class="wrap"><span>Music Labs / Artist Collective</span><div class="footer-contact"><a href="mailto:derexbowei0706@gmail.com">derexbowei0706@gmail.com</a><nav class="footer-social" aria-label="Music Labs 社群連結"><a class="social-icon" href="https://www.instagram.com/musicway666?stkn=MWxudzFoZ2Y5MWZndA==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.8" r="1"></circle></svg></a><a class="social-icon" href="https://youtube.com/@derexlee6898?si=05wEtDKrtBzh2gT7" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21.2 7.2a2.9 2.9 0 0 0-2-2C17.4 4.7 12 4.7 12 4.7s-5.4 0-7.2.5a2.9 2.9 0 0 0-2 2C2.3 9 2.3 12 2.3 12s0 3 .5 4.8a2.9 2.9 0 0 0 2 2c1.8.5 7.2.5 7.2.5s5.4 0 7.2-.5a2.9 2.9 0 0 0 2-2c.5-1.8.5-4.8.5-4.8s0-3-.5-4.8Z"></path><path d="m10 15.4 5-3.4-5-3.4v6.8Z" class="social-icon-fill"></path></svg></a><a class="social-icon xiaohongshu" href="https://xhslink.cn/m/SEf6RHnzlp" target="_blank" rel="noopener noreferrer" aria-label="小紅書" title="小紅書"><span aria-hidden="true">小</span></a><a class="social-icon" href="https://github.com/derex0721/music-labs" target="_blank" rel="noopener noreferrer" aria-label="Music Labs GitHub repository" title="GitHub"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2.5a9.5 9.5 0 0 0-3 18.5c.5.1.6-.2.6-.5v-1.8c-2.5.5-3-1.1-3-1.1-.4-1-1-1.3-1-1.3-.8-.5.1-.5.1-.5.9.1 1.4.9 1.4.9.8 1.4 2.1 1 2.6.8.1-.6.3-1 .6-1.2-2-.2-4.1-1-4.1-4.5 0-1 .4-1.8.9-2.4-.1-.2-.4-1.1.1-2.3 0 0 .8-.2 2.5.9A8.7 8.7 0 0 1 12 7.7c.8 0 1.5.1 2.3.3 1.7-1.1 2.5-.9 2.5-.9.5 1.2.2 2.1.1 2.3.6.6.9 1.4.9 2.4 0 3.5-2.1 4.2-4.1 4.5.3.3.6.8.6 1.6v2.6c0 .3.2.6.6.5a9.5 9.5 0 0 0-3-18.5Z"></path></svg></a></nav></div></div></footer>
-  <script type="module" src="/artists.js?v=20260913-1"></script>
+  <footer class="artist-footer"><div class="wrap"><span>Music Labs / Artist Collective</span><div class="footer-contact"><a href="mailto:derexbowei0706@gmail.com">derexbowei0706@gmail.com</a></div></div></footer>
+  <script type="module" src="/artists.js?v=20260919-submit-v2"></script>
 </body>
 </html>
