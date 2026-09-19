@@ -19,5 +19,32 @@
       "youtube": "https://www.youtube.com/@derexlee6898",
       "instagram": "https://www.instagram.com/musicway666/"
     }
+  },
+  {
+    "id": "summer",
+    "name": "Summer",
+    "role": "Artist",
+    "theme": "violet",
+    "initials": "SUMMER",
+    "photo": "/images/artists/summer-avatar.webp",
+    "genres": [
+      "Alternative R&B"
+    ],
+    "bio": "喜歡像泡在夜晚房間裡很舒服安全的音樂和視覺，用這兩個東西留下一點當下的想法",
+    "works": [
+      {
+        "title": "empty",
+        "type": "youtube",
+        "embedUrl": "https://www.youtube.com/embed/3qGOBbxhIZE",
+        "url": "https://www.youtube.com/watch?v=3qGOBbxhIZE",
+        "cover": "/images/artists/summer-empty.webp",
+        "genre": "Alternative R&B"
+      }
+    ],
+    "posts": [],
+    "featuredTools": [],
+    "socialLinks": {
+      "instagram": "https://www.instagram.com/summerstudio_96/"
+    }
   }
 ]
