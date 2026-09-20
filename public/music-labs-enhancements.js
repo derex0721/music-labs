@@ -26,3 +26,4 @@ document.documentElement.dataset.theme=savedTheme;
 function syncTheme(){const light=document.documentElement.dataset.theme==='light';themeButton.textContent=light?'☾':'☀';themeButton.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');document.getElementById('themeColor')?.setAttribute('content',light?'#f4f5f7':'#101113')}
 themeButton.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=next;sessionStorage.setItem(themeSessionKey,next);syncTheme()});
 syncTheme();
+document.querySelector('footer>div>span:last-child')?.replaceChildren('V2');
