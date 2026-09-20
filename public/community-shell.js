@@ -1,5 +1,10 @@
 const theme=document.documentElement;
-const savedTheme=localStorage.getItem('ml-theme')||'dark';
+const themeSessionKey='ml-theme-session';
+const navigationType=performance.getEntriesByType('navigation')[0]?.type;
+const cameFromMusicLabs=(()=>{try{return !!document.referrer&&new URL(document.referrer).origin===location.origin}catch{return false}})();
+const savedTheme=navigationType!=='reload'&&cameFromMusicLabs&&sessionStorage.getItem(themeSessionKey)==='dark'?'dark':'light';
+if(savedTheme==='light')sessionStorage.removeItem(themeSessionKey);
+localStorage.removeItem('ml-theme');
 theme.dataset.theme=savedTheme;
 const communityPaths=/^\/(community|artists|works|notes|submit)(\/|$)/;
 const isCommunity=communityPaths.test(location.pathname);
@@ -7,7 +12,7 @@ document.body.dataset.siteMode=isCommunity?'community':'wiki';
 document.querySelectorAll('.mode-switch [data-mode]').forEach(link=>{const active=(link.dataset.mode==='community')===isCommunity;link.classList.toggle('active',active);link.setAttribute('aria-selected',String(active))});
 const toggle=document.querySelector('[data-theme-toggle]');
 function syncTheme(){const light=theme.dataset.theme==='light';if(toggle){toggle.textContent=light?'☾':'☀';toggle.setAttribute('aria-label',light?'切換深色模式':'切換亮色模式')}}
-toggle?.addEventListener('click',()=>{theme.dataset.theme=theme.dataset.theme==='light'?'dark':'light';localStorage.setItem('ml-theme',theme.dataset.theme);syncTheme()});
+toggle?.addEventListener('click',()=>{theme.dataset.theme=theme.dataset.theme==='light'?'dark':'light';sessionStorage.setItem(themeSessionKey,theme.dataset.theme);syncTheme()});
 syncTheme();
 
 const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
