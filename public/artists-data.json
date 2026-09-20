@@ -25,7 +25,7 @@
     "name": "Summer",
     "theme": "violet",
     "initials": "SUMMER",
-    "photo": "/images/artists/summer-avatar.webp",
+    "photo": "/images/artists/summer-avatar.svg",
     "genres": [
       "Alternative R&B"
     ],
@@ -39,7 +39,7 @@
         "type": "youtube",
         "embedUrl": "https://www.youtube.com/embed/3qGOBbxhIZE",
         "url": "https://www.youtube.com/watch?v=3qGOBbxhIZE",
-        "cover": "/images/artists/summer-empty.webp",
+        "cover": "/images/artists/summer-empty.svg",
         "genre": "Alternative R&B"
       }
     ],
