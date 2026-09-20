@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Summer artist visual</title>
+  <desc id="desc">An abstract violet night visual for Summer</desc>
+  <defs>
+    <radialGradient id="night" cx="28%" cy="22%" r="88%">
+      <stop offset="0" stop-color="#d8bdff"/>
+      <stop offset=".34" stop-color="#8a58da"/>
+      <stop offset=".7" stop-color="#30204f"/>
+      <stop offset="1" stop-color="#100d1d"/>
+    </radialGradient>
+    <filter id="blur"><feGaussianBlur stdDeviation="42"/></filter>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#night)"/>
+  <circle cx="900" cy="250" r="210" fill="#ffcf70" opacity=".48" filter="url(#blur)"/>
+  <circle cx="270" cy="820" r="260" fill="#f2a7ff" opacity=".28" filter="url(#blur)"/>
+  <path d="M-40 780C210 610 392 896 613 731s351-40 627-272v741H-40Z" fill="#140f26" opacity=".64"/>
+  <g fill="none" stroke="#fff" stroke-opacity=".5">
+    <circle cx="600" cy="600" r="385" stroke-width="2"/>
+    <circle cx="600" cy="600" r="310" stroke-width="1"/>
+  </g>
+  <text x="86" y="104" fill="#fff" font-family="Arial, sans-serif" font-size="30" letter-spacing="9">MUSIC LABS / ARTIST</text>
+  <text x="78" y="1055" fill="#fff" font-family="Arial, sans-serif" font-size="170" font-weight="700" letter-spacing="-10">Summer</text>
+  <text x="88" y="1116" fill="#eadfff" font-family="Arial, sans-serif" font-size="29" letter-spacing="6">ALTERNATIVE R&amp;B</text>
+</svg>
