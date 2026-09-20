@@ -23,6 +23,7 @@ const tools=[
 ];
 
 const discoverItems=[
+  {category:'AI Music',code:'DSS',title:'DiffSynth-Studio：開源生成模型與音樂工作流引擎',summary:'ModelScope 團隊維護的開源生成模型引擎，支援圖像、影片與音訊生成。音樂方面包含 DiffSynth-Music、YuE2、MiniMax-Music3 等模型，可用於音樂生成、控制與模型研究。',summaryEn:'An open-source generative model engine maintained by the ModelScope team, supporting image, video, and audio generation. Its music ecosystem includes DiffSynth-Music, YuE2, MiniMax-Music3, and related music generation workflows.',date:'2026-09-20',source:'GitHub · Open Source',url:'https://github.com/modelscope/DiffSynth-Studio/blob/main/README_zh.md',tags:['Open Source','Music Generation','Music Tech','Diffusion']},
   {category:'Music Tech',code:'UA',title:'Universal Audio：專業錄音硬體與 UAD 音樂製作工具',summary:'Universal Audio 官方平台，集合 UAD 外掛、LUNA 工作站、Apollo／Volt 音訊介面、麥克風與效果器，適合錄音、混音與音樂製作流程。',date:'2026-09-17',source:'Universal Audio',url:'https://www.uaudio.com/'},
   {category:'Music Tech',code:'AIMC',title:'AIMC 2026：第 7 屆 AI 音樂創意國際會議',summary:'於 2026 年 9 月 16–18 日在德國柏林舉行，聚焦 AI 與音樂創作的交會，涵蓋生成式創作、演出系統、機器聆聽、音樂倫理與創作者工作流程。',date:'2026-09-16',eventEndDate:'2026-09-18',source:'AIMC 2026',url:'https://aimc2026.org/home'},
   {category:'Software',code:'BAND',title:'BandBuddy：本機分軌與樂器練習工作站',summary:'支援本機音軌分離、A–B 循環、變速與移調，搭配節拍器及練習錄音，協助拆解歌曲、反覆練習。提供 Windows／macOS 版本；近期也推出 Android／iOS 版本。',date:'2026-09-13',source:'BandBuddy · GitHub',url:'https://github.com/dourgey/BandBuddy'},
