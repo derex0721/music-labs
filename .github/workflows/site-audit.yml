@@ -1,0 +1,31 @@
+name: Site audit
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 4 * * 1"
+
+permissions:
+  contents: read
+
+jobs:
+  unlighthouse:
+    name: Unlighthouse and Core Web Vitals
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Audit the deployed production site
+        run: npx --yes unlighthouse@latest --site https://music-labs.pages.dev --scanner.sitemap true --output-path .unlighthouse
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unlighthouse-report
+          path: .unlighthouse
+          if-no-files-found: warn
+          retention-days: 30
