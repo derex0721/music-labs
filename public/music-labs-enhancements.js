@@ -16,8 +16,13 @@ localeSelect.addEventListener('change',()=>{locale=localeSelect.value;localStora
 applyLanguage();
 
 const themeButton=document.getElementById('themeToggle');
-const savedTheme=localStorage.getItem('ml-theme')||'dark';
+const themeSessionKey='ml-theme-session';
+const navigationType=performance.getEntriesByType('navigation')[0]?.type;
+const cameFromMusicLabs=(()=>{try{return !!document.referrer&&new URL(document.referrer).origin===location.origin}catch{return false}})();
+const savedTheme=navigationType!=='reload'&&cameFromMusicLabs&&sessionStorage.getItem(themeSessionKey)==='dark'?'dark':'light';
+if(savedTheme==='light')sessionStorage.removeItem(themeSessionKey);
+localStorage.removeItem('ml-theme');
 document.documentElement.dataset.theme=savedTheme;
 function syncTheme(){const light=document.documentElement.dataset.theme==='light';themeButton.textContent=light?'☾':'☀';themeButton.setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');document.getElementById('themeColor')?.setAttribute('content',light?'#f4f5f7':'#101113')}
-themeButton.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=next;localStorage.setItem('ml-theme',next);syncTheme()});
+themeButton.addEventListener('click',()=>{const next=document.documentElement.dataset.theme==='light'?'dark':'light';document.documentElement.dataset.theme=next;sessionStorage.setItem(themeSessionKey,next);syncTheme()});
 syncTheme();
