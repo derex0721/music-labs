@@ -9,6 +9,8 @@
   <url><loc>https://music-labs.pages.dev/artists/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://music-labs.pages.dev/artists/summer/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://music-labs.pages.dev/works/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://music-labs.pages.dev/courses/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://music-labs.pages.dev/events/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
   <url><loc>https://music-labs.pages.dev/notes/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
   <url><loc>https://music-labs.pages.dev/artists/submit/</loc><changefreq>monthly</changefreq><priority>0.4</priority></url>
 </urlset>

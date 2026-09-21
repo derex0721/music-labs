@@ -19,8 +19,17 @@
 /community/               /community/index.html          200
 /works                    /works/index.html              200
 /works/                   /works/index.html              200
+/courses                  /courses/index.html            200
+/courses/                 /courses/index.html            200
+/courses/*                /courses/detail/index.html     200
+/events                   /events/index.html             200
+/events/                  /events/index.html             200
+/events/*                 /events/detail/index.html      200
 /notes                    /notes/index.html              200
 /notes/                   /notes/index.html              200
+/notes/*                  /notes/detail/index.html       200
+/create                   /create/index.html             200
+/create/                  /create/index.html             200
 /submit                   /artists/submit/index.html     200
 /submit/                  /artists/submit/index.html     200
 /*                        /index.html                    200

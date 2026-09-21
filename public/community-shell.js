@@ -6,7 +6,7 @@ const savedTheme=navigationType!=='reload'&&cameFromMusicLabs&&sessionStorage.ge
 if(savedTheme==='light')sessionStorage.removeItem(themeSessionKey);
 localStorage.removeItem('ml-theme');
 theme.dataset.theme=savedTheme;
-const communityPaths=/^\/(community|artists|works|notes|submit)(\/|$)/;
+const communityPaths=/^\/(community|artists|works|courses|events|notes|create|submit)(\/|$)/;
 const isCommunity=communityPaths.test(location.pathname);
 document.body.dataset.siteMode=isCommunity?'community':'wiki';
 document.querySelectorAll('.mode-switch [data-mode]').forEach(link=>{const active=(link.dataset.mode==='community')===isCommunity;link.classList.toggle('active',active);link.setAttribute('aria-selected',String(active))});
