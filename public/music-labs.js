@@ -7,15 +7,15 @@ const pulse=(element,duration=220)=>{if(!element)return;clearTimeout(element._pu
 const trackEvent=(name,props={})=>{try{window.gtag?.('event',name,props);window.plausible?.(name,{props})}catch(error){/* analytics are optional */}};
 
 const learnItems=[
-  {index:'01',label:'LEARN',title:'Chord Explorer',description:'看見組成音、公式與音程，立即播放並加入和弦進行。',href:'/#chords',action:'EXPLORE CHORDS'},
-  {index:'02',label:'LEARN',title:'Scale Explorer',description:'比較音階結構、調式色彩與鍵盤位置，建立旋律語彙。',href:'/#scales',action:'EXPLORE SCALES'},
-  {index:'03',label:'PRACTICE',title:'Music Quiz',description:'從辨識到組成音，每答一題都得到簡短的樂理解釋。',href:'/#quiz',action:'TAKE A QUIZ'}
+  {index:'01',label:'LEARN',title:'Chord Explorer',description:'看見組成音、公式與音程，立即播放並加入和弦進行。',href:'/chords/',action:'EXPLORE CHORDS'},
+  {index:'02',label:'LEARN',title:'Scale Explorer',description:'比較音階結構、調式色彩與鍵盤位置，建立旋律語彙。',href:'/scales/',action:'EXPLORE SCALES'},
+  {index:'03',label:'PRACTICE',title:'Music Quiz',description:'從辨識到組成音，每答一題都得到簡短的樂理解釋。',href:'/quiz/',action:'TAKE A QUIZ'}
 ];
 
 const tools=[
   {icon:'4×',title:'Progression Lab',description:'依情緒與調性取得四和弦創作起點。',href:'/#progression-lab',status:'READY'},
-  {icon:'⌁',title:'Chord Finder',description:'探索基礎與進階和弦，聆聽並理解結構。',href:'/#chords',status:'READY'},
-  {icon:'△',title:'Scale Finder',description:'探索調式、藍調與對稱音階。',href:'/#scales',status:'READY'},
+  {icon:'⌁',title:'Chord Finder',description:'探索基礎與進階和弦，聆聽並理解結構。',href:'/chords/',status:'READY'},
+  {icon:'△',title:'Scale Finder',description:'探索調式、藍調與對稱音階。',href:'/scales/',status:'READY'},
   {icon:'↕',title:'Transpose',description:'快速移調並保留和弦延伸音。',href:'/#transpose',status:'READY'},
   {icon:'×2',title:'BPM Calculator',description:'換算 Delay 時值，支援 Tap Tempo。',href:'/#bpm',status:'READY'},
   {icon:'○',title:'Circle of Fifths',description:'互動查看調號與常用功能和弦。',href:'/#circle-of-fifths',status:'READY'},
@@ -60,7 +60,15 @@ function discoverStatus(item){if(!item.eventEndDate)return'';const now=new Date(
 function discoverCard(item){const status=discoverStatus(item);return `<a class="news-card" data-cat="${html(item.category)}" data-analytics-event="discover_open" href="${html(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open original source: ${html(item.title)}"><div class="news-visual"><span>${html(item.code)}</span></div><div class="news-body"><span class="tag">${html(item.category)}</span>${status?`<span class="event-status">${status}</span>`:''}<h3>${html(item.title)}</h3><p>${html(item.summary)}</p><time datetime="${html(item.date)}">${html(item.date)} · ${html(item.source)} <b>↗</b></time></div></a>`}
 function initStandaloneDiscover(){const grid=document.getElementById('newsPageGrid');if(!grid)return;const filters=document.getElementById('newsFilters');const search=document.getElementById('discoverSearch');const clear=document.getElementById('discoverSearchClear');const status=document.getElementById('discoverSearchStatus');const empty=document.getElementById('discoverEmpty');const locale=()=>document.getElementById('langSelect')?.value||localStorage.getItem('ml-locale')||'zh-Hant';const label=value=>discoverCategoryLabels[locale()]?.[value]||value;const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().trim();const sorted=[...discoverItems].sort((a,b)=>b.date.localeCompare(a.date));grid.innerHTML=sorted.map(discoverCard).join('');filters.innerHTML=discoverCategories.map(category=>`<a href="/discover/#discover/${category.slug}" data-cat="${category.label}">${label(category.label)}</a>`).join('');const sync=()=>{const hash=(location.hash||'#discover/all').slice(1).split('/');const selected=discoverCategories.find(category=>category.slug===(hash[1]||'all'))||discoverCategories[0];const selectedLabel=label(selected.label);const isChinese=locale().startsWith('zh');const query=normalize(search?.value);document.getElementById('newsEyebrow').textContent=isChinese?`探索 / ${selectedLabel}`:`DISCOVER / ${selected.slug.toUpperCase()}`;document.getElementById('newsTitle').innerHTML=selected.label==='All'?'Music <em>Discover</em>':`Discover <em>${html(selectedLabel)}</em>`;document.getElementById('newsIntro').textContent=selected.intro;filters.querySelectorAll('a').forEach(link=>{const active=link.dataset.cat===selected.label;link.classList.toggle('active',active);link.toggleAttribute('aria-current',active)});let visible=0;grid.querySelectorAll('.news-card').forEach(card=>{const item=discoverItems.find(entry=>entry.url===card.href);const matches=(selected.label==='All'||card.dataset.cat===selected.label)&&(!query||normalize([item?.title,item?.summary,item?.source,item?.category,label(item?.category)].join(' ')).includes(query));card.hidden=!matches;if(matches)visible++});clear.hidden=!query;status.textContent=query?`${visible} 個搜尋結果`:'';empty.hidden=visible!==0;grid.querySelectorAll('.news-card .tag').forEach(tag=>{tag.textContent=label(tag.closest('.news-card').dataset.cat)})};search?.addEventListener('input',sync);clear?.addEventListener('click',()=>{search.value='';search.focus();sync()});addEventListener('hashchange',sync);document.getElementById('langSelect')?.addEventListener('change',sync);const menuButton=document.getElementById('menuBtn');menuButton?.addEventListener('click',()=>{const menu=document.getElementById('mobileNav');const open=menu.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});document.querySelectorAll('.nav-trigger').forEach(button=>button.addEventListener('click',event=>{event.stopPropagation();const next=button.getAttribute('aria-expanded')!=='true';document.querySelectorAll('.nav-trigger').forEach(item=>item.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(next))}));document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));document.getElementById('mobileNav')?.classList.remove('open');menuButton?.setAttribute('aria-expanded','false')}});sync()}
 const standaloneDiscover=document.body.dataset.discoverStandalone==='true';
-if(!standaloneDiscover){
+const standaloneWiki=document.body.dataset.wikiStandalone==='true';
+function initStandaloneWiki(){
+  const menuButton=document.getElementById('menuBtn');
+  menuButton?.addEventListener('click',()=>{const menu=document.getElementById('mobileNav');const open=menu.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});
+  document.querySelectorAll('.nav-trigger').forEach(button=>button.addEventListener('click',event=>{event.stopPropagation();const next=button.getAttribute('aria-expanded')!=='true';document.querySelectorAll('.nav-trigger').forEach(item=>item.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(next))}));
+  document.addEventListener('click',event=>{if(!event.target.closest('.nav-group'))document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'))});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));document.getElementById('mobileNav')?.classList.remove('open');menuButton?.setAttribute('aria-expanded','false')}});
+}
+if(!standaloneDiscover&&!standaloneWiki){
 const routeAliases={news:'discover','ai-chords':'progression-lab','tool-overview':'tools'};
 function syncSiteMode(){
   const community=Boolean(document.body.dataset.communityMode==='true');
@@ -136,7 +144,9 @@ const quickPiano=document.getElementById('homeQuickPiano');
 quickPiano.innerHTML=NOTES.concat('C').map((note,index)=>`<button class="${note.includes('#')?'black':''} ${quickPitch.has(note)?'active':''}" data-note="${note}${index===12?5:4}" type="button" aria-label="Play ${note}${index===12?5:4}">${note.replace('#','♯')}</button>`).join('');
 quickPiano.addEventListener('click',event=>{const key=event.target.closest('button');if(!key)return;synth.play([key.dataset.note],{onNote:()=>pulse(key)}).then(()=>{document.getElementById('homeAudioStatus').textContent='Audio ready.'}).catch(()=>{document.getElementById('homeAudioStatus').textContent='請確認裝置音量後再試一次。'})});
 document.getElementById('homePlayChord').addEventListener('click',event=>{pulse(event.currentTarget);synth.play(quickNotes,{onNote:note=>{const pitch=note.replace(/\d+$/,'');pulse(quickPiano.querySelector(`[data-note^="${pitch}"]`))}}).then(()=>{document.getElementById('homeAudioStatus').textContent='Playing Cmaj7 · C E G B'}).catch(()=>{document.getElementById('homeAudioStatus').textContent='請確認裝置音量後再試一次。'})});
+}
 
+if(document.getElementById('quizTabs')){
 const quizQuestions=[
   {type:'chord',difficulty:'beginner',question:'C – E – G 組成什麼和弦？',options:['C Major','C Minor','F Major','A Minor'],answer:'C Major',explanation:'C Major = 1 – 3 – 5。C → E 是 Major 3rd，E → G 是 Minor 3rd。'},
   {type:'chord',difficulty:'beginner',question:'A – C – E 組成什麼和弦？',options:['A Major','A Minor','C Major','E Minor'],answer:'A Minor',explanation:'A Minor = 1 – ♭3 – 5。小三度 A → C 決定了小和弦色彩。'},
@@ -167,7 +177,9 @@ document.getElementById('quizDifficulty').addEventListener('click',event=>{const
 document.getElementById('quizAnswers').addEventListener('click',event=>{const button=event.target.closest('button');if(!button||answered)return;answered=true;const question=quizPool()[questionIndex%quizPool().length];document.querySelectorAll('#quizAnswers button').forEach(item=>{item.disabled=true;if(item.dataset.answer===question.answer)item.classList.add('correct')});const correct=button.dataset.answer===question.answer;if(correct){score++;button.classList.add('correct')}else button.classList.add('wrong');document.getElementById('quizScore').textContent=String(score);const best=Math.max(score,Number(localStorage.getItem(bestKey)||0));localStorage.setItem(bestKey,String(best));document.getElementById('bestScore').textContent=String(best);document.getElementById('quizFeedback').innerHTML=`<strong>${correct?'Correct.':'Not quite.'}</strong><p>${html(question.explanation)}</p>${correct?'':'<small>提示：先找出根音，再用公式逐一對照組成音。</small>'}`;document.getElementById('nextQuestion').hidden=false});
 document.getElementById('nextQuestion').addEventListener('click',()=>{questionIndex=(questionIndex+1)%5;if(questionIndex===0)score=0;renderQuiz()});
 renderQuiz();
+}
 
 async function submitFeedback(form){const button=form.querySelector('button[type="submit"]');const status=form.querySelector('[data-form-status]');const success=document.getElementById('feedbackSuccess');button.disabled=true;button.dataset.label=button.textContent;button.textContent='SENDING…';status.textContent='正在安全提交…';try{const response=await fetch(form.action,{method:'POST',headers:{Accept:'application/json'},body:new FormData(form),credentials:'same-origin'});const result=await response.json().catch(()=>({message:'意見服務暫時無法回應。'}));if(!response.ok||!result.ok)throw new Error(result.message||'意見暫時無法送出。');form.reset();form.hidden=true;success.hidden=false;success.focus?.()}catch(error){status.textContent=error instanceof Error?error.message:'暫時無法送出，請稍後再試或使用頁尾 Email。';button.disabled=false;button.textContent=button.dataset.label}}
 document.getElementById('feedbackForm')?.addEventListener('submit',event=>{event.preventDefault();if(event.currentTarget.reportValidity())submitFeedback(event.currentTarget)});
-}else{initStandaloneDiscover()}
+if(standaloneDiscover)initStandaloneDiscover();
+else if(standaloneWiki)initStandaloneWiki();

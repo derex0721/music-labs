@@ -5,38 +5,39 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta id="themeColor" name="theme-color" content="#f4f5f7">
-  <meta name="description" content="為音樂創作者篩選值得關注的工具、資源與技術動態。">
-  <link rel="canonical" href="https://music-labs.pages.dev/discover/">
+  <meta name="description" content="探索音階結構、音符與鍵盤位置，建立調式與即興的音樂直覺。">
+  <link rel="canonical" href="https://music-labs.pages.dev/scales/">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <title>Music Discover — Music Labs</title>
+  <title>Scale Explorer — Music Labs</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/music-labs.css">
   <link rel="stylesheet" href="/music-labs-enhancements.css">
   <link rel="stylesheet" href="/music-labs-tailwind.css">
-  <link rel="stylesheet" href="/music-labs-advanced.css?v=20260923-wiki-polish">
+  <link rel="stylesheet" href="/music-labs-advanced.css?v=20260926-route-phase1">
   <link rel="stylesheet" href="/music-labs-product.css?v=20260923-wiki-polish">
   <link rel="stylesheet" href="/community-shell.css?v=20260919-1">
 </head>
-<body data-discover-standalone="true">
+<body data-wiki-standalone="true" data-wiki-page="scales">
   <a class="skip-link" href="#mainContent">Skip to content</a>
   <header class="topbar">
     <a class="brand" href="/#home" aria-label="Music Labs 首頁"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a>
     <nav class="mode-switch" aria-label="Music Labs 主要模式" role="tablist"><a href="/#home" role="tab" data-mode="wiki" aria-selected="true"><span>音樂百科</span><small>Music Wiki</small></a><a href="/community/" role="tab" data-mode="community" aria-selected="false"><span>音樂人聚落</span><small>Artist Community</small></a></nav>
     <nav class="desktop-nav product-nav wiki-navigation" aria-label="音樂百科導覽">
       <a href="/#home" data-nav="home">Home</a>
-      <div class="nav-group"><button class="nav-trigger" type="button" aria-expanded="false">Theory <span aria-hidden="true">⌄</span></button><div class="nav-menu"><a href="/chords/"><b>Chords</b><span>查詢、聆聽與理解和弦</span></a><a href="/scales/"><b>Scales</b><span>探索音階與調式色彩</span></a><a href="/chords-scales"><b>Theory Library</b><span>進階和弦與音階資料庫</span></a></div></div>
+      <div class="nav-group active"><button class="nav-trigger" type="button" aria-expanded="false">Theory <span aria-hidden="true">⌄</span></button><div class="nav-menu"><a href="/chords/" data-nav="chords"><b>Chords</b><span>查詢、聆聽與理解和弦</span></a><a href="/scales/" data-nav="scales" class="active" aria-current="page"><b>Scales</b><span>探索音階與調式色彩</span></a><a href="/chords-scales" data-nav="chords-scales"><b>Theory Library</b><span>進階和弦與音階資料庫</span></a></div></div>
       <a href="/quiz/" data-nav="quiz">Quiz</a>
       <div class="nav-group"><button class="nav-trigger" type="button" aria-expanded="false">Tools <span aria-hidden="true">⌄</span></button><div class="nav-menu"><a href="/#progression-lab"><b>Progression Lab</b><span>產生並播放和弦進行</span></a><a href="/#circle-of-fifths"><b>Circle of Fifths</b><span>查看調號與功能和弦</span></a><a href="/#transpose"><b>Transpose</b><span>保留延伸音的快速移調</span></a><a href="/#bpm"><b>BPM Calculator</b><span>Delay 時值與 Tap Tempo</span></a><a href="/#tools"><b>All Tools</b><span>開啟 Producer Utility Belt</span></a></div></div>
-      <a href="/discover/" data-nav="discover" class="active" aria-current="page">Discover</a>
+      <a href="/discover/" data-nav="discover">Discover</a>
     </nav>
     <div class="desktop-header-actions"><div class="site-controls"><label class="sr-only" for="langSelect">Language</label><select id="langSelect" aria-label="選擇語言"><option value="zh-Hant">繁中</option><option value="zh-Hans">简中</option><option value="en">EN</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="fr">FR</option></select><button id="themeToggle" class="theme-toggle" type="button" aria-label="切換亮色或深色">☀</button></div><button class="menu-btn" id="menuBtn" type="button" aria-label="Open navigation" aria-controls="mobileNav" aria-expanded="false"><span></span><span></span></button></div>
   </header>
-  <nav class="mobile-nav product-mobile-nav" id="mobileNav" aria-label="Mobile navigation"><div class="mobile-wiki-navigation"><a href="/#home">Home <span>首頁</span></a><details><summary>Theory <span>樂理</span></summary><div><a href="/chords/">Chords</a><a href="/scales/">Scales</a><a href="/chords-scales">Theory Library</a></div></details><a href="/quiz/">Quiz <span>練習</span></a><details><summary>Tools <span>創作工具</span></summary><div><a href="/#progression-lab">Progression Lab</a><a href="/#circle-of-fifths">Circle of Fifths</a><a href="/#transpose">Transpose</a><a href="/#bpm">BPM Calculator</a><a href="/#tools">All Tools</a></div></details><a href="/discover/" aria-current="page">Discover <span>音樂探索</span></a></div><a href="https://github.com/derex0721/music-labs" target="_blank" rel="noopener noreferrer">GitHub <span>Music Labs 原始碼 ↗</span></a></nav>
-  <main id="mainContent"><section class="page inner-page active" data-page="discover"><div class="page-intro wrap"><p class="index" id="newsEyebrow">DISCOVER / ALL</p><h1 id="newsTitle">Music <em>Discover</em></h1><p id="newsIntro">為音樂創作者篩選值得關注的工具、資源與技術動態。</p></div><div class="news-page wrap"><div class="discover-search"><label for="discoverSearch"><span aria-hidden="true">⌕</span><span class="sr-only">搜尋音樂探索內容</span><input id="discoverSearch" type="search" inputmode="search" autocomplete="off" placeholder="搜尋工具、網站或主題…" aria-describedby="discoverSearchStatus"></label><button id="discoverSearchClear" type="button" hidden aria-label="清除搜尋">清除</button><output id="discoverSearchStatus" aria-live="polite"></output></div><div class="filters" id="newsFilters" aria-label="Discover categories"></div><div class="news-grid full" id="newsPageGrid"></div><p class="discover-empty" id="discoverEmpty" hidden>找不到相符的工具或資源。請嘗試其他關鍵字或分類。</p></div></section></main>
+  <nav class="mobile-nav product-mobile-nav" id="mobileNav" aria-label="Mobile navigation"><div class="mobile-wiki-navigation"><a href="/#home">Home <span>首頁</span></a><details open><summary>Theory <span>樂理</span></summary><div><a href="/chords/">Chords</a><a href="/scales/" aria-current="page">Scales</a><a href="/chords-scales">Theory Library</a></div></details><a href="/quiz/">Quiz <span>練習</span></a><details><summary>Tools <span>創作工具</span></summary><div><a href="/#progression-lab">Progression Lab</a><a href="/#circle-of-fifths">Circle of Fifths</a><a href="/#transpose">Transpose</a><a href="/#bpm">BPM Calculator</a><a href="/#tools">All Tools</a></div></details><a href="/discover/">Discover <span>音樂探索</span></a></div><a href="https://github.com/derex0721/music-labs" target="_blank" rel="noopener noreferrer">GitHub <span>Music Labs 原始碼 ↗</span></a></nav>
+  <main id="mainContent"><section class="page inner-page active" data-page="scales"><div class="page-intro wrap"><p class="index">LEARN / SCALES</p><h1>Scale <em>Explorer</em></h1><p>切換根音與調式，看見音階結構、鍵盤位置和獨特聲響。</p><a class="text-link inline-action" href="/chords-scales">Browse Theory Library →</a></div><div class="explorer-layout wrap"><aside class="control-panel"><label>ROOT NOTE</label><div class="root-grid" id="scaleRoots"></div><label>CATEGORY</label><div class="category-list" id="scaleCategories"></div><label>SCALE TYPE</label><div class="type-list" id="scaleTypes"></div></aside><div class="result-panel"><div class="result-top"><div><small>CURRENT SCALE</small><h2 id="scaleName">C Major</h2></div><button class="play-btn" id="playScale" type="button">▶ <span>PLAY SCALE</span></button></div><div class="formula" id="scaleFormula"></div><div class="piano" id="scalePiano"></div><p class="hint">點擊琴鍵，或按 A W S E D F T G Y H U J K 演奏。</p><p class="scale-mood" id="scaleMood"></p></div></div></section></main>
   <footer><div class="wrap"><a class="brand" href="/#home"><span class="brand-mark"><i></i><i></i><i></i></span><span>Music <b>Labs</b></span></a><p>Learn → Practice → Create → Discover</p><span>V2 / 2026</span></div></footer>
   <script type="module" src="/music-labs.js?v=20260926-route-phase1"></script>
+  <script type="module" src="/music-labs-advanced.js?v=20260926-route-phase1"></script>
   <script src="/music-labs-enhancements.js?v=20260919-community"></script>
 </body>
 </html>
