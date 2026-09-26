@@ -1,7 +1,16 @@
-interface Env { RESEND_API_KEY?: string; RESEND_FROM_EMAIL?: string; DB?: D1Database }
+import {
+  CommunityContentSlugConflictError,
+  createOrGetContentItem,
+  getOrCreateCreator,
+} from "../../db/community-repository.ts";
+import { createCommunitySlug, validatePendingSubmissionStatus } from "../../db/community-validation.ts";
+import type { CommunityDatabase } from "../../db/index.ts";
+
+interface Env { RESEND_API_KEY?: string; RESEND_FROM_EMAIL?: string; DB?: CommunityDatabase }
 
 const MAX_FILE = 3 * 1024 * 1024;
 const MAX_BODY = 10 * 1024 * 1024;
+const MAX_PAYLOAD = 48 * 1024;
 const MAX_RELEASES = 3;
 const ROLES = new Set(['singer','songwriter','composer','producer','instrumentalist','dj','band','visual-artist','other']);
 const GENRES = new Set(['pop','alternative-rnb','rnb','rock','indie','electronic','hip-hop','jazz','folk','world','classical','ambient','experimental','other']);
@@ -51,6 +60,7 @@ export const onRequestPost: PagesFunction<Env> = async ({request,env}) => {
   const contentLength=Number(request.headers.get('Content-Length')||0);if(contentLength>MAX_BODY)return reply('圖片或投稿內容過大。',413);
   let form: FormData;try{form=await request.formData()}catch{return reply('無法讀取投稿內容。')}
   if(text(form,'bot-field'))return reply('無法處理這次提交。');
+  if(form.has('status')){try{validatePendingSubmissionStatus(form.get('status'))}catch{return reply('投稿狀態無效；新內容只能送交審核。')}}
   const name=text(form,'name'),email=text(form,'email').toLowerCase(),bioZh=text(form,'bioZh')||text(form,'intro'),bioEn=text(form,'bioEn')||text(form,'introEn');
   if(!name||!email||!bioZh)return reply('請完整填寫 Artist Name、Email 與中文介紹。');
   if(name.length>80||email.length>160||bioZh.length>2000||bioEn.length>3000)return reply('部分欄位超過允許長度。');
@@ -77,10 +87,28 @@ export const onRequestPost: PagesFunction<Env> = async ({request,env}) => {
   const attachments=[avatarFile,heroFile,...artworks].filter(Boolean) as Array<{filename:string;content:string;content_type:string;size:number}>;if(attachments.reduce((sum,file)=>sum+file.size,0)>8*1024*1024)return reply('圖片總大小不可超過 8 MB。',413);
   const releases=releaseUrls.map((url,index)=>({id:`${slug}-release-${index+1}`,title:releaseTitles[index]||`Release ${index+1}`,type:typeValues[index]||'Other',genres:genreValues[index]?[genreValues[index]]:genres,artwork:artworks[index]?.filename||'',url,description:descriptionValues[index]||'',featured:index===0}));
   const artist={schemaVersion:'artist-profile-v2',id:slug,slug,name,roles,genres,bio:{zh:bioZh,en:bioEn},avatar:avatarFile?.filename||'',heroImage:heroFile?.filename||'',releases,socials,status:'pending',publishMode:'review',editorNotes:text(form,'editorNotes'),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString()};
-  if(!env.RESEND_API_KEY)return reply('投稿信箱尚未完成設定，請稍後再試。',503);
+  if(!env.DB)return reply('投稿服務暫時無法連線，請稍後再試。',503);
+  let creator: Awaited<ReturnType<typeof getOrCreateCreator>>;
+  const savedItems: Awaited<ReturnType<typeof createOrGetContentItem>>[]=[];
+  try {
+    creator=await getOrCreateCreator({slug,displayName:name,status:'pending'},env.DB);
+    for(const [index,release] of releases.entries()){
+      const workPayload={
+        release:{id:release.id,title:release.title,type:release.type,genres:release.genres,artwork:release.artwork,url:release.url,description:release.description,featured:release.featured},
+        artist:{name,roles,genres,bio:{zh:bioZh,en:bioEn},avatar:artist.avatar,heroImage:artist.heroImage,socials},
+      };
+      if(new TextEncoder().encode(JSON.stringify(workPayload)).byteLength>MAX_PAYLOAD)return reply('投稿內容過大，請縮短介紹或作品資訊後重試。',413);
+      const workSlug=createCommunitySlug('work',creator.slug,release.title,release.url+':'+index);
+      const item=await createOrGetContentItem({creatorId:creator.id,type:'work',slug:workSlug,title:release.title,payload:workPayload,status:'pending'},env.DB);
+      savedItems.push(item);
+    }
+  } catch(error) {
+    if(error instanceof CommunityContentSlugConflictError)return reply('相同網址已被其他作品使用，請修改作品標題後重試。',409);
+    return reply('投稿暫時無法儲存，請稍後重試。',503);
+  }
   const privateText=`聯絡 Email：${email}\n同意編輯協助：${text(form,'editConsent')==='yes'?'是':'否'}\n\n`;
   const publicText=JSON.stringify(artist,null,2);
   const payload={from:env.RESEND_FROM_EMAIL||'Music Labs <onboarding@resend.dev>',to:['derexbowei0706@gmail.com'],reply_to:email,subject:`Music Labs Artist Profile Review｜${name.replace(/[\r\n]/g,' ')}｜${slug}`,text:`待審核 Artist Profile（不會自動刊登）\n\n${publicText}\n\n--- 僅供管理，不公開 ---\n${privateText}`,html:`<h1>待審核 Artist Profile</h1><pre style="white-space:pre-wrap;font-family:inherit">${escape(publicText)}</pre><hr><p>僅供管理，不公開</p><pre style="white-space:pre-wrap;font-family:inherit">${escape(privateText)}</pre>`,...(attachments.length?{attachments:attachments.map(file=>({filename:file.filename,content:file.content,content_type:file.content_type}))}: {})};
-  try{const response=await fetch('https://api.resend.com/emails',{method:'POST',signal:AbortSignal.timeout(15000),headers:{Authorization:`Bearer ${env.RESEND_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify(payload)});if(!response.ok)return reply('郵件暫時無法寄出，請稍後再試。',502)}catch{return reply('投稿服務暫時無法連線，請稍後再試。',502)}
-  return reply('投稿完成，已進入 Music Labs Review。',200,{status:'pending',publishMode:'review',slug});
+  if(env.RESEND_API_KEY){try{await fetch('https://api.resend.com/emails',{method:'POST',signal:AbortSignal.timeout(15000),headers:{Authorization:`Bearer ${env.RESEND_API_KEY}`,'Content-Type':'application/json'},body:JSON.stringify(payload)})}catch{}}
+  return reply('投稿完成，已進入 Music Labs Pending Review。',200,{id:savedItems[0]?.id,ids:savedItems.map(item=>item.id),status:'pending',publishMode:'review',creatorSlug:slug,slug:savedItems[0]?.slug||slug});
 };

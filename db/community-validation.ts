@@ -22,6 +22,12 @@ export function validateCommunityContentStatus(value: unknown): CommunityContent
   throw new TypeError("Content status must be draft, pending, published, or rejected.");
 }
 
+export function validatePendingSubmissionStatus(value: unknown): void {
+  if (value !== undefined && value !== "pending") {
+    throw new TypeError("New submissions must use pending status.");
+  }
+}
+
 export function validateCommunitySlug(value: unknown): string {
   if (typeof value !== "string") throw new TypeError("A slug is required.");
   const slug = value.trim().toLowerCase();
@@ -29,6 +35,35 @@ export function validateCommunitySlug(value: unknown): string {
     throw new TypeError("Slug must contain lowercase letters, numbers, and single hyphens.");
   }
   return slug;
+}
+
+export function createCommunitySlug(
+  type: CommunityContentType,
+  creatorSlug: string,
+  title: string,
+  discriminator = "",
+): string {
+  const safeType = validateCommunityContentType(type);
+  const safeCreatorSlug = validateCommunitySlug(creatorSlug);
+  const safeTitle = title.trim();
+  if (!safeTitle) throw new TypeError("A title is required to create a slug.");
+
+  const titlePart = safeTitle
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/[\s_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48) || "content";
+  const identity = `${safeCreatorSlug}:${safeType}:${safeTitle}:${discriminator}`;
+  let hash = 2166136261;
+  for (let index = 0; index < identity.length; index += 1) {
+    hash ^= identity.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return validateCommunitySlug(`${safeType}-${titlePart}-${(hash >>> 0).toString(36)}`);
 }
 
 export type CommunityPayload = Record<string, unknown>;

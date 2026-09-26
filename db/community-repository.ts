@@ -1,6 +1,6 @@
 import { and, desc, eq, isNotNull, sql, type SQL } from "drizzle-orm";
-import { getDb } from "./index";
-import { contentItems, creators, type CommunityContentStatus, type CommunityContentType } from "./schema";
+import { getDb, type CommunityDatabase } from "./index.ts";
+import { contentItems, creators, type CommunityContentStatus, type CommunityContentType } from "./schema.ts";
 import {
   publishedAtForStatus,
   serializeCommunityPayload,
@@ -8,7 +8,7 @@ import {
   validateCommunityContentType,
   validateCommunitySlug,
   type CommunityPayload,
-} from "./community-validation";
+} from "./community-validation.ts";
 
 export type Creator = typeof creators.$inferSelect;
 
@@ -52,6 +52,13 @@ export interface PublishedContentOptions {
   creatorId?: number;
   limit?: number;
   offset?: number;
+}
+
+export class CommunityContentSlugConflictError extends Error {
+  constructor() {
+    super("A different Community content item already uses this slug.");
+    this.name = "CommunityContentSlugConflictError";
+  }
 }
 
 type ContentRow = typeof contentItems.$inferSelect;
@@ -123,6 +130,29 @@ export async function createCreator(input: CreateCreatorInput): Promise<Creator>
   return creator;
 }
 
+export async function getOrCreateCreator(
+  input: CreateCreatorInput,
+  database?: CommunityDatabase,
+): Promise<Creator> {
+  const slug = validateCommunitySlug(input.slug);
+  const existing = await getCreatorBySlug(slug, database);
+  if (existing) return existing;
+
+  const displayName = requiredText(input.displayName, "Display name");
+  const status = requiredText(input.status, "Creator status");
+  const now = new Date().toISOString();
+  const [created] = await getDb(database)
+    .insert(creators)
+    .values({ slug, displayName, status, createdAt: now, updatedAt: now })
+    .onConflictDoNothing({ target: creators.slug })
+    .returning();
+  if (created) return created;
+
+  const resolved = await getCreatorBySlug(slug, database);
+  if (!resolved) throw new Error("Creator could not be resolved after insert.");
+  return resolved;
+}
+
 export async function getCreatorById(creatorId: number): Promise<Creator | null> {
   const [creator] = await getDb()
     .select()
@@ -132,8 +162,11 @@ export async function getCreatorById(creatorId: number): Promise<Creator | null>
   return creator ?? null;
 }
 
-export async function getCreatorBySlug(slug: string): Promise<Creator | null> {
-  const [creator] = await getDb()
+export async function getCreatorBySlug(
+  slug: string,
+  database?: CommunityDatabase,
+): Promise<Creator | null> {
+  const [creator] = await getDb(database)
     .select()
     .from(creators)
     .where(eq(creators.slug, validateCommunitySlug(slug)))
@@ -151,7 +184,10 @@ export async function updateCreatorStatus(creatorId: number, status: string): Pr
   return creator ?? null;
 }
 
-export async function createContentItem(input: CreateContentItemInput): Promise<CommunityContentItem> {
+export async function createContentItem(
+  input: CreateContentItemInput,
+  database?: CommunityDatabase,
+): Promise<CommunityContentItem> {
   const creatorId = positiveId(input.creatorId, "Creator id");
   const type = validateCommunityContentType(input.type);
   const status = validateCommunityContentStatus(input.status ?? "draft");
@@ -159,7 +195,7 @@ export async function createContentItem(input: CreateContentItemInput): Promise<
   const title = requiredText(input.title, "Content title");
   const payloadJson = serializeCommunityPayload(input.payload);
   const now = new Date().toISOString();
-  const [row] = await getDb()
+  const [row] = await getDb(database)
     .insert(contentItems)
     .values({
       creatorId,
@@ -184,6 +220,46 @@ export async function createContentItem(input: CreateContentItemInput): Promise<
   return item;
 }
 
+export async function createOrGetContentItem(
+  input: CreateContentItemInput,
+  database?: CommunityDatabase,
+): Promise<CommunityContentItem> {
+  const checkedInput: CreateContentItemInput = {
+    ...input,
+    type: validateCommunityContentType(input.type),
+    status: validateCommunityContentStatus(input.status ?? "draft"),
+    slug: validateCommunitySlug(input.slug),
+    title: requiredText(input.title, "Content title"),
+  };
+  const payloadJson = serializeCommunityPayload(checkedInput.payload);
+  const isSameSubmission = (item: CommunityContentItem | null) =>
+    Boolean(
+      item &&
+        item.creatorId === checkedInput.creatorId &&
+        item.type === checkedInput.type &&
+        item.slug === checkedInput.slug &&
+        item.title === checkedInput.title &&
+        item.status === checkedInput.status &&
+        JSON.stringify(item.payload) === payloadJson,
+    );
+
+  const existing = await getContentItemBySlug(checkedInput.slug, database);
+  if (existing) {
+    if (isSameSubmission(existing)) return existing;
+    throw new CommunityContentSlugConflictError();
+  }
+
+  try {
+    return await createContentItem(checkedInput, database);
+  } catch (error) {
+    // A concurrent retry may have inserted the same unique slug between the read and insert.
+    const concurrent = await getContentItemBySlug(checkedInput.slug, database);
+    if (isSameSubmission(concurrent)) return concurrent!;
+    if (concurrent) throw new CommunityContentSlugConflictError();
+    throw error;
+  }
+}
+
 export async function getContentItemById(contentId: number): Promise<CommunityContentItem | null> {
   const [row] = await getDb()
     .select()
@@ -193,8 +269,11 @@ export async function getContentItemById(contentId: number): Promise<CommunityCo
   return mapContentRow(row);
 }
 
-export async function getContentItemBySlug(slug: string): Promise<CommunityContentItem | null> {
-  const [row] = await getDb()
+export async function getContentItemBySlug(
+  slug: string,
+  database?: CommunityDatabase,
+): Promise<CommunityContentItem | null> {
+  const [row] = await getDb(database)
     .select()
     .from(contentItems)
     .where(and(eq(contentItems.slug, validateCommunitySlug(slug)), ...communityRowConditions()))
