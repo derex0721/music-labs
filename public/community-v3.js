@@ -45,6 +45,15 @@ const V3 = (() => {
   function emptyMarkup(kind, copy) {
     return `<div class="v3-empty"><strong>${esc(kind)}即將由創作者帶來</strong><p>${esc(copy)}</p><a class="v3-button" href="/create/">前往發布</a></div>`;
   }
+  const contentEmptyState = {
+    events: {copy:'目前還沒有公開活動。', cta:'發布活動 →'},
+    courses: {copy:'目前還沒有公開課程。', cta:'發布課程 →'},
+    notes: {copy:'目前還沒有創作筆記。', cta:'發布創作筆記 →'}
+  };
+  function contentEmptyMarkup(type) {
+    const state = contentEmptyState[type];
+    return `<div class="v3-empty"><p>${esc(state.copy)}</p><a class="v3-button" href="/create/">${esc(state.cta)}</a></div>`;
+  }
   function creatorMarkup(artist) {
     const bio = typeof artist.bio === 'string' ? artist.bio : (artist.bio?.zh || artist.bio?.en || '');
     const photo = artist.photo ? `<img src="${esc(artist.photo)}" alt="${esc(artist.name)} 頭像" loading="lazy">` : `<span class="v3-avatar-fallback">${esc(initials(artist.name))}</span>`;
@@ -65,7 +74,7 @@ const V3 = (() => {
   async function renderContentList(root, type, limit = 6) {
     try {
       const result = await content(type, {limit});
-      if (!result.items?.length) { root.innerHTML = emptyMarkup(typeLabel[type], type === 'events' ? '公開活動會依日期排序，過期活動不會出現在 Upcoming。' : '第一批已審核發布的內容會顯示在這裡。'); return; }
+      if (!result.items?.length) { root.innerHTML = contentEmptyMarkup(type); return; }
       root.innerHTML = type === 'events' ? result.items.map((item) => cardMarkup(item, type)).join('') : result.items.map((item) => cardMarkup(item, type)).join('');
       imageFallbacks(root);
     } catch { root.innerHTML = emptyMarkup(typeLabel[type], '暫時無法載入內容，請稍後再試。'); }
