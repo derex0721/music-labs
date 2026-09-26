@@ -1,9 +1,9 @@
-/tools/transpose          /?route=transpose          301
-/tools/bpm                /?route=bpm                301
-/tools/bpm-calculator     /?route=bpm                301
-/tools/ai-chords          /?route=progression-lab    301
-/tools/progression-lab    /?route=progression-lab    301
-/tools/circle-of-fifths   /?route=circle-of-fifths   301
+/tools/transpose          /tools/transpose/          301
+/tools/bpm                /tools/bpm/                301
+/tools/bpm-calculator     /tools/bpm/                301
+/tools/ai-chords          /tools/progression/        301
+/tools/progression-lab    /tools/progression/        301
+/tools/circle-of-fifths   /tools/circle/             301
 /chords-scales            /?route=chords-scales      301
 /chords/*                 /index.html                    200
 /scales/*                 /index.html                    200

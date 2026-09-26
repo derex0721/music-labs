@@ -1,1 +1,1 @@
-(()=>{const routes={'#chords':'/chords/','#scales':'/scales/','#quiz':'/quiz/'};const target=routes[location.hash.split('/')[0]];if(target)location.replace(target)})();
+(()=>{const routes={'#chords':'/chords/','#scales':'/scales/','#quiz':'/quiz/','#tools':'/tools/','#progression-lab':'/tools/progression/','#circle-of-fifths':'/tools/circle/','#transpose':'/tools/transpose/','#bpm':'/tools/bpm/'};const target=routes[location.hash.split('/')[0]];if(target)location.replace(target)})();

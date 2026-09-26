@@ -13,14 +13,15 @@ const learnItems=[
 ];
 
 const tools=[
-  {icon:'4×',title:'Progression Lab',description:'依情緒與調性取得四和弦創作起點。',href:'/#progression-lab',status:'READY'},
+  {icon:'4×',title:'Progression Lab',description:'依情緒與調性取得四和弦創作起點。',href:'/tools/progression/',status:'READY'},
   {icon:'⌁',title:'Chord Finder',description:'探索基礎與進階和弦，聆聽並理解結構。',href:'/chords/',status:'READY'},
   {icon:'△',title:'Scale Finder',description:'探索調式、藍調與對稱音階。',href:'/scales/',status:'READY'},
-  {icon:'↕',title:'Transpose',description:'快速移調並保留和弦延伸音。',href:'/#transpose',status:'READY'},
-  {icon:'×2',title:'BPM Calculator',description:'換算 Delay 時值，支援 Tap Tempo。',href:'/#bpm',status:'READY'},
-  {icon:'○',title:'Circle of Fifths',description:'互動查看調號與常用功能和弦。',href:'/#circle-of-fifths',status:'READY'},
-  {icon:'TAP',title:'Tap Tempo',description:'用點擊快速抓出歌曲或靈感的速度。',href:'/#bpm',status:'READY'}
+  {icon:'↕',title:'Transpose',description:'快速移調並保留和弦延伸音。',href:'/tools/transpose/',status:'READY'},
+  {icon:'×2',title:'BPM Calculator',description:'換算 Delay 時值，支援 Tap Tempo。',href:'/tools/bpm/',status:'READY'},
+  {icon:'○',title:'Circle of Fifths',description:'互動查看調號與常用功能和弦。',href:'/tools/circle/',status:'READY'},
+  {icon:'TAP',title:'Tap Tempo',description:'用點擊快速抓出歌曲或靈感的速度。',href:'/tools/bpm/',status:'READY'}
 ];
+function renderToolsPage(container){if(container)container.innerHTML=tools.map((tool,index)=>`<article class="tool-card product-tool-card"><header><span class="tool-icon">${tool.icon}</span><small>${String(index+1).padStart(2,'0')} / ${tool.status}</small></header><h3>${tool.title}</h3><p>${tool.description}</p><a class="tool-open-link" data-analytics-event="tool_open" href="${tool.href}">OPEN TOOL →</a></article>`).join('')}
 
 const discoverItems=[
   {category:'AI Music',code:'DSS',title:'DiffSynth-Studio：開源生成模型與音樂工作流引擎',summary:'ModelScope 團隊維護的開源生成模型引擎，支援圖像、影片與音訊生成。音樂方面包含 DiffSynth-Music、YuE2、MiniMax-Music3 等模型，可用於音樂生成、控制與模型研究。',summaryEn:'An open-source generative model engine maintained by the ModelScope team, supporting image, video, and audio generation. Its music ecosystem includes DiffSynth-Music, YuE2, MiniMax-Music3, and related music generation workflows.',date:'2026-09-20',source:'GitHub · Open Source',url:'https://github.com/modelscope/DiffSynth-Studio/blob/main/README_zh.md',tags:['Open Source','Music Generation','Music Tech','Diffusion']},
@@ -114,7 +115,7 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.qu
 document.getElementById('homeLearn').innerHTML=learnItems.map(item=>`<a class="learn-card" data-analytics-event="learning_step" href="${item.href}"><span class="learn-index">${item.index}</span><small>${item.label}</small><h3>${item.title}</h3><p>${item.description}</p><b>${item.action} →</b></a>`).join('');
 const primaryTools=['Progression Lab','Circle of Fifths','Transpose','BPM Calculator'];
 document.getElementById('homeTools').innerHTML=tools.filter(tool=>primaryTools.includes(tool.title)).map(tool=>`<a class="creator-tool-card" data-analytics-event="tool_open" href="${tool.href}"><span class="tool-icon">${tool.icon}</span><div><small>${tool.status}</small><h3>${tool.title}</h3><p>${tool.description}</p></div><b>↗</b></a>`).join('');
-document.getElementById('toolsPage').innerHTML=tools.map((tool,index)=>`<article class="tool-card product-tool-card"><header><span class="tool-icon">${tool.icon}</span><small>${String(index+1).padStart(2,'0')} / ${tool.status}</small></header><h3>${tool.title}</h3><p>${tool.description}</p><a class="tool-open-link" data-analytics-event="tool_open" href="${tool.href}">OPEN TOOL →</a></article>`).join('');
+renderToolsPage(document.getElementById('toolsPage'));
 
 const latestDiscoverItems=[...discoverItems].sort((a,b)=>b.date.localeCompare(a.date));
 document.getElementById('homeNews').innerHTML=latestDiscoverItems.slice(0,3).map(discoverCard).join('');
@@ -182,4 +183,7 @@ renderQuiz();
 async function submitFeedback(form){const button=form.querySelector('button[type="submit"]');const status=form.querySelector('[data-form-status]');const success=document.getElementById('feedbackSuccess');button.disabled=true;button.dataset.label=button.textContent;button.textContent='SENDING…';status.textContent='正在安全提交…';try{const response=await fetch(form.action,{method:'POST',headers:{Accept:'application/json'},body:new FormData(form),credentials:'same-origin'});const result=await response.json().catch(()=>({message:'意見服務暫時無法回應。'}));if(!response.ok||!result.ok)throw new Error(result.message||'意見暫時無法送出。');form.reset();form.hidden=true;success.hidden=false;success.focus?.()}catch(error){status.textContent=error instanceof Error?error.message:'暫時無法送出，請稍後再試或使用頁尾 Email。';button.disabled=false;button.textContent=button.dataset.label}}
 document.getElementById('feedbackForm')?.addEventListener('submit',event=>{event.preventDefault();if(event.currentTarget.reportValidity())submitFeedback(event.currentTarget)});
 if(standaloneDiscover)initStandaloneDiscover();
-else if(standaloneWiki)initStandaloneWiki();
+else if(standaloneWiki){
+  initStandaloneWiki();
+  renderToolsPage(document.getElementById('toolsPage'));
+}
