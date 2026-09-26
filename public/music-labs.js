@@ -42,6 +42,26 @@ const discoverItems=[
   {category:'Music Tech',code:'MOSS',title:'Mossland：AIGC 音訊與影片創作工作台',summary:'整合文字轉語音、音色庫、多語配音、轉錄與聲音處理工具。',date:'2026-09-11',source:'Mossland',url:'https://mossland.studio/'}
 ];
 
+const discoverCategories=[
+  {label:'All',slug:'all',intro:'為音樂創作者篩選值得關注的工具、資源與技術動態。'},
+  {label:'AI Music',slug:'ai-music',intro:'生成音樂、智慧配樂、聲音模型與 AI 輔助創作工具。'},
+  {label:'Plugins',slug:'plugins',intro:'音源、效果器、混音與製作 Plugin 的重要更新。'},
+  {label:'Software',slug:'software',intro:'DAW、聲音軟體與創作工作流程的新功能。'},
+  {label:'Hardware',slug:'hardware',intro:'合成器、控制器、音訊介面與製作設備。'},
+  {label:'Free Resources',slug:'free-resources',intro:'可以立即加入創作流程的免費音色、取樣與工具。'},
+  {label:'Tutorials',slug:'tutorials',intro:'能直接改善音樂製作與樂理理解的實用教學。'},
+  {label:'Music Tech',slug:'music-tech',intro:'聲音、軟體與創作介面正在發生的技術變化。'}
+];
+const discoverCategoryLabels={
+  'zh-Hant':{All:'全部','AI Music':'AI 音樂',Plugins:'外掛',Software:'軟體',Hardware:'硬體','Free Resources':'免費資源',Tutorials:'教學','Music Tech':'音樂科技'},
+  'zh-Hans':{All:'全部','AI Music':'AI 音乐',Plugins:'插件',Software:'软件',Hardware:'硬件','Free Resources':'免费资源',Tutorials:'教程','Music Tech':'音乐科技'}
+};
+function discoverStatus(item){if(!item.eventEndDate)return'';const now=new Date();const start=new Date(`${item.date}T00:00:00`);const end=new Date(`${item.eventEndDate}T23:59:59`);return now<start?'即將開始':now<=end?'進行中':'已結束'}
+function discoverCard(item){const status=discoverStatus(item);return `<a class="news-card" data-cat="${html(item.category)}" data-analytics-event="discover_open" href="${html(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open original source: ${html(item.title)}"><div class="news-visual"><span>${html(item.code)}</span></div><div class="news-body"><span class="tag">${html(item.category)}</span>${status?`<span class="event-status">${status}</span>`:''}<h3>${html(item.title)}</h3><p>${html(item.summary)}</p><time datetime="${html(item.date)}">${html(item.date)} · ${html(item.source)} <b>↗</b></time></div></a>`}
+function initStandaloneDiscover(){const grid=document.getElementById('newsPageGrid');if(!grid)return;const filters=document.getElementById('newsFilters');const search=document.getElementById('discoverSearch');const clear=document.getElementById('discoverSearchClear');const status=document.getElementById('discoverSearchStatus');const empty=document.getElementById('discoverEmpty');const locale=()=>document.getElementById('langSelect')?.value||localStorage.getItem('ml-locale')||'zh-Hant';const label=value=>discoverCategoryLabels[locale()]?.[value]||value;const normalize=value=>String(value||'').normalize('NFKC').toLocaleLowerCase().trim();const sorted=[...discoverItems].sort((a,b)=>b.date.localeCompare(a.date));grid.innerHTML=sorted.map(discoverCard).join('');filters.innerHTML=discoverCategories.map(category=>`<a href="/discover/#discover/${category.slug}" data-cat="${category.label}">${label(category.label)}</a>`).join('');const sync=()=>{const hash=(location.hash||'#discover/all').slice(1).split('/');const selected=discoverCategories.find(category=>category.slug===(hash[1]||'all'))||discoverCategories[0];const selectedLabel=label(selected.label);const isChinese=locale().startsWith('zh');const query=normalize(search?.value);document.getElementById('newsEyebrow').textContent=isChinese?`探索 / ${selectedLabel}`:`DISCOVER / ${selected.slug.toUpperCase()}`;document.getElementById('newsTitle').innerHTML=selected.label==='All'?'Music <em>Discover</em>':`Discover <em>${html(selectedLabel)}</em>`;document.getElementById('newsIntro').textContent=selected.intro;filters.querySelectorAll('a').forEach(link=>{const active=link.dataset.cat===selected.label;link.classList.toggle('active',active);link.toggleAttribute('aria-current',active)});let visible=0;grid.querySelectorAll('.news-card').forEach(card=>{const item=discoverItems.find(entry=>entry.url===card.href);const matches=(selected.label==='All'||card.dataset.cat===selected.label)&&(!query||normalize([item?.title,item?.summary,item?.source,item?.category,label(item?.category)].join(' ')).includes(query));card.hidden=!matches;if(matches)visible++});clear.hidden=!query;status.textContent=query?`${visible} 個搜尋結果`:'';empty.hidden=visible!==0;grid.querySelectorAll('.news-card .tag').forEach(tag=>{tag.textContent=label(tag.closest('.news-card').dataset.cat)})};search?.addEventListener('input',sync);clear?.addEventListener('click',()=>{search.value='';search.focus();sync()});addEventListener('hashchange',sync);document.getElementById('langSelect')?.addEventListener('change',sync);const menuButton=document.getElementById('menuBtn');menuButton?.addEventListener('click',()=>{const menu=document.getElementById('mobileNav');const open=menu.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open))});document.querySelectorAll('.nav-trigger').forEach(button=>button.addEventListener('click',event=>{event.stopPropagation();const next=button.getAttribute('aria-expanded')!=='true';document.querySelectorAll('.nav-trigger').forEach(item=>item.setAttribute('aria-expanded','false'));button.setAttribute('aria-expanded',String(next))}));document.addEventListener('keydown',event=>{if(event.key==='Escape'){document.querySelectorAll('.nav-trigger').forEach(button=>button.setAttribute('aria-expanded','false'));document.getElementById('mobileNav')?.classList.remove('open');menuButton?.setAttribute('aria-expanded','false')}});sync()}
+const standaloneDiscover=document.body.dataset.discoverStandalone==='true';
+if(!standaloneDiscover){
+
 const routeAliases={news:'discover','ai-chords':'progression-lab','tool-overview':'tools'};
 function syncSiteMode(){
   const community=Boolean(document.body.dataset.communityMode==='true');
@@ -89,25 +109,9 @@ const primaryTools=['Progression Lab','Circle of Fifths','Transpose','BPM Calcul
 document.getElementById('homeTools').innerHTML=tools.filter(tool=>primaryTools.includes(tool.title)).map(tool=>`<a class="creator-tool-card" data-analytics-event="tool_open" href="${tool.href}"><span class="tool-icon">${tool.icon}</span><div><small>${tool.status}</small><h3>${tool.title}</h3><p>${tool.description}</p></div><b>↗</b></a>`).join('');
 document.getElementById('toolsPage').innerHTML=tools.map((tool,index)=>`<article class="tool-card product-tool-card"><header><span class="tool-icon">${tool.icon}</span><small>${String(index+1).padStart(2,'0')} / ${tool.status}</small></header><h3>${tool.title}</h3><p>${tool.description}</p><a class="tool-open-link" data-analytics-event="tool_open" href="${tool.href}">OPEN TOOL →</a></article>`).join('');
 
-function discoverStatus(item){if(!item.eventEndDate)return'';const now=new Date();const start=new Date(`${item.date}T00:00:00`);const end=new Date(`${item.eventEndDate}T23:59:59`);return now<start?'即將開始':now<=end?'進行中':'已結束'}
-function discoverCard(item){const status=discoverStatus(item);return `<a class="news-card" data-cat="${html(item.category)}" data-analytics-event="discover_open" href="${html(item.url)}" target="_blank" rel="noopener noreferrer" aria-label="Open original source: ${html(item.title)}"><div class="news-visual"><span>${html(item.code)}</span></div><div class="news-body"><span class="tag">${html(item.category)}</span>${status?`<span class="event-status">${status}</span>`:''}<h3>${html(item.title)}</h3><p>${html(item.summary)}</p><time datetime="${html(item.date)}">${html(item.date)} · ${html(item.source)} <b>↗</b></time></div></a>`}
 const latestDiscoverItems=[...discoverItems].sort((a,b)=>b.date.localeCompare(a.date));
 document.getElementById('homeNews').innerHTML=latestDiscoverItems.slice(0,3).map(discoverCard).join('');
 document.getElementById('newsPageGrid').innerHTML=latestDiscoverItems.map(discoverCard).join('');
-const discoverCategories=[
-  {label:'All',slug:'all',intro:'為音樂創作者篩選值得關注的工具、資源與技術動態。'},
-  {label:'AI Music',slug:'ai-music',intro:'生成音樂、智慧配樂、聲音模型與 AI 輔助創作工具。'},
-  {label:'Plugins',slug:'plugins',intro:'音源、效果器、混音與製作 Plugin 的重要更新。'},
-  {label:'Software',slug:'software',intro:'DAW、聲音軟體與創作工作流程的新功能。'},
-  {label:'Hardware',slug:'hardware',intro:'合成器、控制器、音訊介面與製作設備。'},
-  {label:'Free Resources',slug:'free-resources',intro:'可以立即加入創作流程的免費音色、取樣與工具。'},
-  {label:'Tutorials',slug:'tutorials',intro:'能直接改善音樂製作與樂理理解的實用教學。'},
-  {label:'Music Tech',slug:'music-tech',intro:'聲音、軟體與創作介面正在發生的技術變化。'}
-];
-const discoverCategoryLabels={
-  'zh-Hant':{All:'全部','AI Music':'AI 音樂',Plugins:'外掛',Software:'軟體',Hardware:'硬體','Free Resources':'免費資源',Tutorials:'教學','Music Tech':'音樂科技'},
-  'zh-Hans':{All:'全部','AI Music':'AI 音乐',Plugins:'插件',Software:'软件',Hardware:'硬件','Free Resources':'免费资源',Tutorials:'教程','Music Tech':'音乐科技'}
-};
 const discoverLocale=()=>document.getElementById('langSelect')?.value||localStorage.getItem('ml-locale')||'zh-Hant';
 const discoverCategoryLabel=label=>discoverCategoryLabels[discoverLocale()]?.[label]||label;
 function renderDiscoverCategoryLabels(){
@@ -167,3 +171,4 @@ renderQuiz();
 
 async function submitFeedback(form){const button=form.querySelector('button[type="submit"]');const status=form.querySelector('[data-form-status]');const success=document.getElementById('feedbackSuccess');button.disabled=true;button.dataset.label=button.textContent;button.textContent='SENDING…';status.textContent='正在安全提交…';try{const response=await fetch(form.action,{method:'POST',headers:{Accept:'application/json'},body:new FormData(form),credentials:'same-origin'});const result=await response.json().catch(()=>({message:'意見服務暫時無法回應。'}));if(!response.ok||!result.ok)throw new Error(result.message||'意見暫時無法送出。');form.reset();form.hidden=true;success.hidden=false;success.focus?.()}catch(error){status.textContent=error instanceof Error?error.message:'暫時無法送出，請稍後再試或使用頁尾 Email。';button.disabled=false;button.textContent=button.dataset.label}}
 document.getElementById('feedbackForm')?.addEventListener('submit',event=>{event.preventDefault();if(event.currentTarget.reportValidity())submitFeedback(event.currentTarget)});
+}else{initStandaloneDiscover()}
