@@ -66,7 +66,7 @@ const DELAY_LABELS=[['whole','全音符','Whole'],['half','二分音符','Half']
 if(bpmInput&&delayResults){
   const updateBpm=()=>{
     const values=calculateDelayTimes(Number(bpmInput.value));
-    delayResults.innerHTML=DELAY_LABELS.map(([key,zh,en])=>`<div class="delay-value"><span>${zh} · ${en}</span><strong>${values?values[key]:'—'} <b>ms</b></strong></div>`).join('');
+    delayResults.innerHTML=DELAY_LABELS.map(([key,zh,en])=>`<div class="delay-value"><span>${zh} · ${en}</span><strong class="tabular-nums">${values?values[key]:'—'} <b>ms</b></strong></div>`).join('');
   };
   bpmInput.addEventListener('input',updateBpm);
   updateBpm();
